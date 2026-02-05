@@ -1,0 +1,141 @@
+:root {
+    --navy: #201d38;
+    --bg: #f8f9fa;
+    --text-gray: #6c757d;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--navy);
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 2rem;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.main-content {
+    max-width: 1100px;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(40px);
+}
+
+.logo {
+    width: clamp(200px, 45vw, 320px);
+    margin-bottom: 3rem;
+}
+
+h1 {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    letter-spacing: 0.05em;
+}
+
+.subtitle {
+    font-size: clamp(0.95rem, 3.5vw, 1.1rem);
+    color: var(--text-gray);
+    margin-bottom: clamp(2rem, 6vw, 4rem);
+    line-height: 1.6;
+}
+
+.products {
+    margin-bottom: 3rem;
+}
+
+.products h2 {
+    font-size: clamp(1.3rem, 4vw, 1.6rem);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.products-description {
+    font-size: 0.95rem;
+    color: var(--text-gray);
+    margin-bottom: 2.5rem;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: clamp(1rem, 4vw, 1.5rem);
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.product-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.product-link img {
+    width: 100%;
+    max-width: clamp(55px, 18vw, 110px);
+    max-height: clamp(40px, 12vw, 80px);
+    object-fit: contain;
+}
+
+@media (hover: hover) {
+    .product-link:hover {
+        transform: scale(1.08);
+        opacity: 0.85;
+    }
+}
+
+.product-link:active {
+    transform: scale(0.95);
+}
+
+.bottom-section {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1.5px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-gray);
+    transition: 0.2s ease;
+    text-decoration: none;
+}
+
+.social-link:hover {
+    border-color: var(--navy);
+    background: var(--navy);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.footer {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+}
