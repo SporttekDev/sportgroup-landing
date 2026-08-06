@@ -1,26 +1,333 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ---- locked two-color brand palette: navy + white only ---- */
+  --navy: #201d38;
+  --navy-90: rgba(32, 29, 56, 0.9);
+  --navy-80: rgba(32, 29, 56, 0.8);
+  --navy-60: rgba(32, 29, 56, 0.6);
+  --navy-40: rgba(32, 29, 56, 0.4);
+  --navy-20: rgba(32, 29, 56, 0.18);
+  --navy-10: rgba(32, 29, 56, 0.08);
+  --navy-06: rgba(32, 29, 56, 0.05);
+  --white: #ffffff;
+  --white-90: rgba(255, 255, 255, 0.9);
+  --white-70: rgba(255, 255, 255, 0.72);
+  --white-40: rgba(255, 255, 255, 0.4);
+  --white-18: rgba(255, 255, 255, 0.18);
+  --white-10: rgba(255, 255, 255, 0.1);
+
+  /* shadcn tokens mapped to the two-color palette (no new hues introduced) */
+  --background: var(--white);
+  --foreground: var(--navy);
+  --card: var(--white);
+  --card-foreground: var(--navy);
+  --popover: var(--white);
+  --popover-foreground: var(--navy);
+  --primary: var(--navy);
+  --primary-foreground: var(--white);
+  --secondary: var(--navy-06);
+  --secondary-foreground: var(--navy);
+  --muted: var(--navy-06);
+  --muted-foreground: var(--navy-60);
+  --accent: var(--navy-06);
+  --accent-foreground: var(--navy);
+  --border: var(--navy-10);
+  --input: var(--navy-10);
+  --ring: var(--navy-40);
+  --radius: 0.45rem;
 }
 
 @theme inline {
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-sora);
+  --font-mono: var(--font-space-mono);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .font-display {
+    font-family: var(--font-sora);
+  }
+  .font-mono {
+    font-family: var(--font-space-mono);
+  }
+
+  /* ---------- glass surfaces (with solid fallback for no backdrop-filter support) ---------- */
+  .glass-light {
+    background: var(--white-70);
+    border: 1px solid var(--navy-10);
+  }
+  .glass-dark {
+    background: var(--navy-80);
+    border: 1px solid var(--white-18);
+  }
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .glass-light {
+      background: rgba(255, 255, 255, 0.56);
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+    }
+    .glass-dark {
+      background: rgba(32, 29, 56, 0.55);
+      backdrop-filter: blur(16px) saturate(120%);
+      -webkit-backdrop-filter: blur(16px) saturate(120%);
+    }
+  }
+
+  /* ---------- navbar ---------- */
+  .navbar {
+    background: rgba(255, 255, 255, 0.72);
+    border-bottom: 1px solid var(--navy-10);
+  }
+  @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .navbar {
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+  }
+  .nav-link {
+    position: relative;
+    color: var(--navy);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 1.5px;
+    background: var(--navy);
+    transition: width 0.3s ease;
+  }
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  /* hamburger bars */
+  .bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--navy);
+    margin: 4px 0;
+    transition: 0.3s;
+  }
+  .hamburger.open .bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+  .hamburger.open .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.open .bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* ---------- hero line-art ---------- */
+  .hero-lines path,
+  .hero-lines circle,
+  .hero-lines rect {
+    fill: none;
+    stroke: var(--white);
+    stroke-opacity: 0.16;
+    stroke-width: 1.1;
+  }
+  .draw {
+    stroke-dasharray: 1400;
+    stroke-dashoffset: 1400;
+    animation: draw 2.6s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+  }
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .draw-d2 {
+    animation-delay: 0.25s;
+  }
+  .draw-d3 {
+    animation-delay: 0.5s;
+  }
+  .draw-d4 {
+    animation-delay: 0.75s;
+  }
+
+  /* ---------- buttons ---------- */
+  .btn-solid {
+    background: var(--white);
+    color: var(--navy);
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+  }
+  .btn-solid:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px -14px rgba(255, 255, 255, 0.35);
+  }
+  .btn-ghost {
+    border: 1px solid var(--white-40);
+    color: var(--white);
+    transition: 0.35s ease;
+  }
+  .btn-ghost:hover {
+    background: var(--white-10);
+    border-color: var(--white-70);
+  }
+  .btn-ghost-navy {
+    border: 1px solid var(--navy-40);
+    color: var(--navy);
+    transition: 0.35s ease;
+  }
+  .btn-ghost-navy:hover {
+    background: var(--navy-06);
+    border-color: var(--navy);
+  }
+
+  /* section rule instead of eyebrow */
+  .rule {
+    width: 56px;
+    height: 3px;
+    background: var(--navy);
+    position: relative;
+  }
+  .rule::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 64px;
+    width: 14px;
+    height: 3px;
+    background: var(--navy);
+    opacity: 0.35;
+  }
+  .rule-white {
+    background: var(--white);
+  }
+  .rule-white::after {
+    background: var(--white);
+    opacity: 0.4;
+  }
+
+  /* ---------- business line cards ---------- */
+  .badge {
+    width: 56px;
+    height: 56px;
+    border-radius: 9999px;
+    background: var(--navy);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-space-mono);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.03em;
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .biz-card:hover .badge {
+    transform: rotate(-6deg) scale(1.06);
+  }
+  .biz-card svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--navy);
+    stroke-width: 1.6;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .decor-shape {
+    position: absolute;
+    border: 1.2px solid var(--navy-10);
+    border-radius: 9999px;
+  }
+
+  /* ---------- about / stats ---------- */
+  .about-bg {
+    background: var(--navy);
+  }
+  .stat-num {
+    font-family: var(--font-space-mono);
+    letter-spacing: -0.01em;
+  }
+
+  /* ---------- footer ---------- */
+  .social-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 9999px;
+    border: 1px solid var(--white-18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s ease;
+  }
+  .social-icon:hover {
+    background: var(--white-10);
+    border-color: var(--white-40);
+    transform: translateY(-3px);
+  }
+  .social-icon svg {
+    width: 16px;
+    height: 16px;
+    stroke: var(--white);
+    fill: none;
+    stroke-width: 1.6;
+  }
+
+  /* line-pattern divider used in place of eyebrow labels */
+  .court-divider {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .court-divider span {
+    display: block;
+    width: 5px;
+    height: 5px;
+    border-radius: 9999px;
+    background: var(--navy-40);
+  }
 }
