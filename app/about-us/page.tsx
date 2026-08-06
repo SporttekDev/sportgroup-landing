@@ -15,23 +15,27 @@ export const metadata: Metadata = {
 const journey = [
     {
         year: "2019",
-        title: "[PLACEHOLDER: Milestone title]",
-        description: "[PLACEHOLDER: Describe this milestone in SGI's history.]",
+        title: "Awal Berdiri",
+        description:
+            "Sport Group Indonesia didirikan dengan visi menghadirkan ekosistem olahraga yang terintegrasi, dimulai dari lini bisnis kontraktor infrastruktur olahraga.",
     },
     {
         year: "2020",
-        title: "[PLACEHOLDER: Milestone title]",
-        description: "[PLACEHOLDER: Describe this milestone in SGI's history.]",
+        title: "Ekspansi Lini Bisnis",
+        description:
+            "SGI mulai merambah ke sektor teknologi dan edukasi olahraga, memperluas jangkauan layanan untuk mendukung pengembangan talenta dan fasilitas olahraga di Indonesia.",
     },
     {
         year: "2021",
-        title: "[PLACEHOLDER: Milestone title]",
-        description: "[PLACEHOLDER: Describe this milestone in SGI's history.]",
+        title: "Pengembangan Venue & Fasilitas",
+        description:
+            "Peluncuran lini bisnis venue dan pengelolaan fasilitas olahraga, memperkuat akses masyarakat terhadap sarana olahraga berkualitas di berbagai daerah.",
     },
     {
         year: "2022",
-        title: "[PLACEHOLDER: Milestone title]",
-        description: "[PLACEHOLDER: Describe this milestone in SGI's history.]",
+        title: "Investasi & Pariwisata Olahraga",
+        description:
+            "SGI melengkapi tujuh lini bisnisnya dengan membuka peluang investasi dan pariwisata olahraga, menjadikan ekosistem olahraga nasional semakin berkelanjutan dan menyeluruh.",
     },
 ];
 

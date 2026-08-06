@@ -131,7 +131,7 @@ export default async function BusinessLineDetailPage({
                     <Reveal mode="mount" className="mt-8 grid grid-cols-1 items-end gap-10 lg:grid-cols-[1fr_auto]">
                         <div className="max-w-3xl">
                             <div className="flex items-center gap-3">
-                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white/10">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-white">
                                     {businessLine.logo ? (
                                         <Image
                                             src={businessLine.logo}
