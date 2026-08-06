@@ -228,9 +228,9 @@ export default async function BusinessLineDetailPage({
                     <h2 className="font-display text-2xl font-semibold text-navy-900">
                         Gallery
                     </h2>
-                    <p className="mt-2 text-sm text-navy-500">
+                    {/* <p className="mt-2 text-sm text-navy-500">
                         [PLACEHOLDER: replace with real {businessLine.name} facility / activity photography]
-                    </p>
+                    </p> */}
                     <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
                         {Array.from({ length: 4 }).map((_, index) => (
                             <div
