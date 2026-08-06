@@ -185,7 +185,7 @@ function NavArrow({
                     <Icon className="h-6 w-6 text-white" />
                 </motion.button>
             </TooltipTrigger>
-            <TooltipContent className="max-w-[220px] border border-white/20 bg-white/10 text-white backdrop-blur-md">
+            <TooltipContent className="max-w-55 border border-white/20 bg-white/10 text-white backdrop-blur-md">
                 <p className="font-display font-semibold">{label}</p>
                 <p className="text-xs opacity-90">{description}</p>
             </TooltipContent>
@@ -278,7 +278,7 @@ export function BusinessLinesCarousel() {
                     {/* ---------- carousel ---------- */}
                     <div className="flex flex-1 items-center justify-center">
                         <div
-                            className="relative flex h-[60vh] w-full max-w-[350px] flex-col items-center justify-center md:h-full md:max-w-[500px]"
+                            className="relative flex h-[60vh] w-full max-w-87.5 flex-col items-center justify-center md:h-full md:max-w-125"
                             style={{ perspective: 1000 }}
                         >
                             <NavArrow
@@ -293,7 +293,7 @@ export function BusinessLinesCarousel() {
                                 dragElastic={0.15}
                                 dragMomentum={false}
                                 onDragEnd={handleDragEnd}
-                                className="relative flex h-full w-[350px] cursor-grab flex-col items-center justify-center active:cursor-grabbing md:w-[450px]"
+                                className="relative flex h-full w-87.5 cursor-grab flex-col items-center justify-center active:cursor-grabbing md:w-112.5"
                                 style={{ transformStyle: "preserve-3d" }}
                             >
                                 {BUSINESS_LINES.map((line, i) => {
@@ -317,13 +317,13 @@ export function BusinessLinesCarousel() {
                                                     transition={{ duration: DURATION, ease: EASE }}
                                                     style={{ zIndex: target.zIndex, pointerEvents: target.opacity === 0 ? "none" : "auto" }}
                                                     className={cn(
-                                                        "absolute flex h-[180px] w-[320px] items-center justify-center rounded-2xl md:h-[225px] md:w-[400px]",
+                                                        "absolute flex h-45 w-[320px] items-center justify-center rounded-2xl md:h-56.25 md:w-100",
                                                         "border border-white/25 bg-white/10 backdrop-blur-md",
                                                         "shadow-[0_20px_40px_rgba(0,0,0,0.25)]",
                                                         "outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-4"
                                                     )}
                                                 >
-                                                    <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-white/15 via-transparent to-transparent" />
+                                                    <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-white/15 via-transparent to-transparent" />
 
                                                     <motion.div
                                                         className={cn(
@@ -350,7 +350,7 @@ export function BusinessLinesCarousel() {
                                                 </motion.button>
                                             </TooltipTrigger>
                                             <TooltipContent
-                                                className="max-w-[240px] border border-white/20 bg-white/10 text-center text-white backdrop-blur-md"
+                                                className="max-w-60 border border-white/20 bg-white/10 text-center text-white backdrop-blur-md"
                                             >
                                                 <p className="font-display font-semibold">{line.role}</p>
                                                 <p className="text-xs opacity-90">{line.description}</p>
@@ -375,7 +375,7 @@ export function BusinessLinesCarousel() {
                             <NavArrow direction="down" onClick={() => goTo(currentIndex + 1)} />
                         </div>
 
-                        <div className="w-full max-w-[380px] text-center">
+                        <div className="w-full max-w-95 text-center">
                             <AnimatePresence mode="wait">
                                 <motion.div
                                     key={active.name}
@@ -453,7 +453,7 @@ export function BusinessLinesCarousel() {
                                         scale: i === currentIndex ? 1.2 : 1,
                                     }}
                                     transition={COLOR_TRANSITION}
-                                    className="h-3 w-3 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+                                    className="h-3 w-3 rounded-full focus-visible:outline focus-visible:outline-white"
                                 />
                             ))}
                         </div>

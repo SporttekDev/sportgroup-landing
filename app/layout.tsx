@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Sora, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 
 // original HTML loaded Sora (400-800) for headings, Inter (400-600) for body,
 // Space Mono (400/700) for the mono badges/stat numbers
@@ -41,7 +43,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <TooltipProvider>
+          <Navbar />
           {children}
+          <Footer />
+          {/* <Footer /> */}
         </TooltipProvider>
       </body>
     </html>
