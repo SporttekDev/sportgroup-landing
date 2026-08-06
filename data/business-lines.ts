@@ -1,8 +1,14 @@
 /**
  * Business Line data for Sport Group Indonesia (SGI).
  * Each entry powers: the grid card (summary), and the [slug] detail page
- * (description, services, badges). No statistics are fabricated — any
- * factual claim not provided in the brief is marked [PLACEHOLDER: ...].
+ * (description, services, badges).
+ *
+ * NOTE: The four factual gaps flagged below (courts/hours/booking for
+ * PlayPro Sports Arena, venue/court details for lapanganpickle.id,
+ * investment model for Sport Growth Indonesia, and destinations/
+ * testimonials for From The Origin) have been filled with DUMMY data
+ * for development purposes, per instruction. Replace with confirmed
+ * facts before shipping to production — search "DUMMY:" to find them.
  */
 
 export interface BusinessLine {
@@ -129,7 +135,8 @@ export const businessLines: BusinessLine[] = [
         description: [
             "PlayPro Sports Arena is a dedicated padel and tennis venue owned and operated by SGI in North Bekasi.",
             "The arena is built on Laykold surfacing, the same certified surface system STI installs for partner venues — giving players a competition-grade court experience.",
-            "[PLACEHOLDER: number of courts, operating hours, and booking channel details].",
+            // DUMMY: courts / hours / booking — replace with confirmed figures.
+            "The venue currently runs 4 padel courts and 2 tennis courts, open daily from 06:00 to 23:00 WIB, with bookings made directly through the PlayPro app.",
         ],
         services: [
             "Padel courts (Laykold surface)",
@@ -154,13 +161,15 @@ export const businessLines: BusinessLine[] = [
         description: [
             "lapanganpickle.id is SGI's dedicated pickleball business line, formed as pickleball has grown rapidly as a participation sport.",
             "As the official Laykold pickleball partner, courts under this business line are built to PPA (Professional Pickleball Association) US Open standard.",
-            "[PLACEHOLDER: venue locations, number of courts, and booking details].",
+            // DUMMY: venue locations / court count / booking — replace with confirmed figures.
+            "The first venue is located in North Bekasi with 6 courts, and bookings can be made through the lapanganpickle.id website or the PlayPro app.",
         ],
         services: [
             "Pickleball court construction (Laykold surface)",
             "PPA US Open standard courts",
             "Court booking & venue access",
         ],
+        location: "North Bekasi, West Java",
         badges: ["Official Laykold Pickleball Partner", "PPA US Open Standard"],
         order: 5,
         // NOTE: filename mismatch flagged for the user — slug is
@@ -182,7 +191,8 @@ export const businessLines: BusinessLine[] = [
         description: [
             "Sport Growth Indonesia is SGI's investment arm, focused on sports infrastructure.",
             "The business line partners with venue owners who are underfunded, providing capital and operational support to bring facilities up to standard.",
-            "[PLACEHOLDER: investment model, ticket size, and portfolio venues].",
+            // DUMMY: investment model / ticket size / portfolio — replace with confirmed figures.
+            "Sport Growth Indonesia typically structures partnerships as revenue-sharing joint ventures, with ticket sizes ranging from IDR 500 million to IDR 5 billion per venue, and currently holds a portfolio of 3 partner venues across West Java.",
         ],
         services: [
             "Infrastructure investment for sports venues",
@@ -206,7 +216,8 @@ export const businessLines: BusinessLine[] = [
         description: [
             "From The Origin (FTO) is SGI's sport tourism business line, designing travel experiences built around sport.",
             "FTO's offerings span tailor-made travel itineraries, corporate and community group travel, fully private journeys, and dedicated concierge service throughout.",
-            "[PLACEHOLDER: signature destinations, sample itineraries, and traveler testimonials].",
+            // DUMMY: destinations / itineraries / testimonials — replace with confirmed content.
+            "Signature journeys include padel retreats in Bali, marathon travel packages to Tokyo and Berlin, and corporate team-building trips to Yogyakarta, each paired with a dedicated concierge from planning through return.",
         ],
         services: [
             "Tailor-made travel itineraries",
