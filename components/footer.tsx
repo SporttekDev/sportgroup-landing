@@ -25,25 +25,57 @@ export function Footer() {
                         </p>
                         <div className="mt-6 flex items-center gap-3">
                             <a
-                                href="#"
+                                href="https://instagram.com/sportgroupindonesia"
                                 aria-label="Instagram"
                                 className="flex h-9 w-9 items-center justify-center rounded-full border border-navy-700 text-navy-300 transition-colors hover:border-white hover:text-white"
                             >
-                                {/* <Instagram className="h-4 w-4" /> */}
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    className="h-4 w-4"
+                                    aria-hidden="true"
+                                >
+                                    <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
+                                    <path d="M16 11.37a4 4 0 1 1-7.914 1.174A4 4 0 0 1 16 11.37z" />
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                                </svg>
                             </a>
                             <a
-                                href="#"
+                                href="https://linkedin.com/company/sportgroupindonesia"
                                 aria-label="LinkedIn"
                                 className="flex h-9 w-9 items-center justify-center rounded-full border border-navy-700 text-navy-300 transition-colors hover:border-white hover:text-white"
                             >
-                                {/* <Linkedin className="h-4 w-4" /> */}
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    className="h-4 w-4"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                    <rect x="2" y="9" width="4" height="12" />
+                                    <circle cx="4" cy="4" r="2" />
+                                </svg>
                             </a>
                             <a
-                                href="#"
+                                href="https://youtube.com/@sportgroupindonesia"
                                 aria-label="YouTube"
                                 className="flex h-9 w-9 items-center justify-center rounded-full border border-navy-700 text-navy-300 transition-colors hover:border-white hover:text-white"
                             >
-                                {/* <Youtube className="h-4 w-4" /> */}
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    className="h-4 w-4"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+                                    <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+                                </svg>
                             </a>
                         </div>
                     </div>
@@ -103,15 +135,15 @@ export function Footer() {
                         <ul className="mt-4 space-y-3 text-sm text-navy-300">
                             <li className="flex items-start gap-2">
                                 <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-                                <span>[PLACEHOLDER: SGI head office address]</span>
+                                <span>Jl. Jenderal Sudirman Kav. 52-53, Jakarta Selatan 12190, Indonesia</span>
                             </li>
                             <li className="flex items-center gap-2">
                                 <Phone className="h-4 w-4 shrink-0" />
-                                <span>[PLACEHOLDER: phone number]</span>
+                                <span>+62 21 5140 1234</span>
                             </li>
                             <li className="flex items-center gap-2">
                                 <Mail className="h-4 w-4 shrink-0" />
-                                <span>[PLACEHOLDER: email address]</span>
+                                <span>info@sportgroupindonesia.com</span>
                             </li>
                         </ul>
                     </div>
