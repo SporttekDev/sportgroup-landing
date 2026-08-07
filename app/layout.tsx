@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
-import { Sora, Inter, Space_Mono } from "next/font/google";
+import { Archivo, Inter, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 
-// original HTML loaded Sora (400-800) for headings, Inter (400-600) for body,
-// Space Mono (400/700) for the mono badges/stat numbers
-const sora = Sora({
-  variable: "--font-sora",
+// Heading: Archivo — grotesk tegas, terminal kotak, athletic
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["600", "700", "800", "900"],
 });
 
 const inter = Inter({
@@ -39,14 +38,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${sora.variable} ${inter.variable} ${spaceMono.variable} h-full antialiased`}
+      className={`${archivo.variable} ${inter.variable} ${spaceMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <TooltipProvider>
           <Navbar />
           {children}
           <Footer />
-          {/* <Footer /> */}
         </TooltipProvider>
       </body>
     </html>

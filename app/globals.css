@@ -133,8 +133,9 @@
   --color-navy-950: var(--navy-950);
   --color-white: var(--white);
 
-  --font-sans: var(--font-plus-jakarta-sans);
-  --font-display: var(--font-outfit);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-archivo);
+  --font-mono: var(--font-space-mono);
 }
 
 @layer base {
