@@ -21,14 +21,14 @@ export default function SolutionPage() {
                 imageAlt="SGI cross-business solutions"
             />
 
-            <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+            {/* <div className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
                 <div className="flex items-start gap-3 rounded-lg border border-navy-200 bg-navy-50 px-4 py-3">
                     <span className="text-sm text-navy-600">
                         The solutions below are early drafts pending internal confirmation. Details marked{" "}
                         <span className="font-medium text-navy-900">[PLACEHOLDER]</span> will be finalized before launch.
                     </span>
                 </div>
-            </div>
+            </div> */}
 
             <SolutionGrid title="All Solutions" />
 
