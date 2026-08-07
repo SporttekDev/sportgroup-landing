@@ -7,6 +7,7 @@ import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const NAV_LINKS = [
     { label: "Home", href: "/" },
@@ -14,6 +15,13 @@ const NAV_LINKS = [
     { label: "Business Line", href: "/business-line" },
     { label: "Solution", href: "/solution" },
 ];
+
+// Every route below opens on a dark/photo hero (PageHero, or the themed
+// Business Line / Solution detail hero) — the navbar needs light text while
+// it's still transparent (pre-scroll) on these. Home is excluded: its hero
+// sits on white, so the navbar there should stay navy from the start.
+const DARK_HERO_EXACT_ROUTES = ["/about-us", "/contact"];
+const DARK_HERO_PREFIX_ROUTES = ["/business-line", "/solution"];
 
 export function Navbar() {
     const pathname = usePathname();
@@ -28,13 +36,9 @@ export function Navbar() {
     const isActive = (href: string) =>
         href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-    // The business-line DETAIL hero (/business-line/<slug>) is always dark —
-    // either accent-themed or falling back to navy-900 — unlike the list
-    // page (/business-line) and every other hero, which sit on white.
-    // While the navbar is still transparent (not scrolled) on that route,
-    // nav text needs to flip to light so it stays readable over the hero.
     const isDarkHeroRoute =
-        pathname.startsWith("/business-line/") && pathname !== "/business-line";
+        DARK_HERO_EXACT_ROUTES.includes(pathname) ||
+        DARK_HERO_PREFIX_ROUTES.some((route) => pathname.startsWith(route));
     const showLightText = isDarkHeroRoute && !isScrolled;
 
     return (
@@ -55,12 +59,13 @@ export function Navbar() {
                         showLightText ? "text-white" : "text-navy-900"
                     )}
                 >
-                    <span
-                        className="flex h-9 w-9 items-center justify-center rounded-lg bg-navy-800 text-sm font-bold text-white"
-                        aria-hidden
-                    >
-                        SGI
-                    </span>
+                    <Image
+                        src={showLightText ? "/logos/sport-group-indonesia-white.png" : "/logos/sport-group-indonesia.png"}
+                        alt="Sport Group Indonesia Logo"
+                        width={100}
+                        height={100}
+                        className="relative h-10 w-10 object-contain"
+                    />
                     <span className="hidden sm:inline">Sport Group Indonesia</span>
                 </Link>
 
@@ -87,7 +92,7 @@ export function Navbar() {
                 </div>
 
                 <div className="hidden md:block">
-                    <Button asChild className="bg-navy-800 text-white hover:bg-navy-700">
+                    <Button asChild className={showLightText ? "border-white/25 bg-white/10 text-white/85 backdrop-blur-md hover:bg-white/40" : "bg-navy-800 text-white hover:bg-navy-700"}>
                         <Link href="/contact">Contact Us</Link>
                     </Button>
                 </div>

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, MessageCircle, Phone, Clock } from "lucide-react";
-import { Reveal } from "@/components/motion/reveal";
+import { PageHero } from "@/components/page-hero";
 import { ContactForm } from "@/components/contact-form";
 
 export const metadata: Metadata = {
@@ -35,23 +35,16 @@ const contactInfo = [
 export default function ContactPage() {
     return (
         <>
-            <section className="bg-white pt-24">
-                <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-                    <Reveal mode="mount">
-                        <span className="text-xs font-semibold uppercase tracking-wide text-navy-400">
-                            Contact
-                        </span>
-                        <h1 className="mt-2 max-w-2xl font-display text-4xl font-semibold leading-display-safe tracking-tighter text-navy-900 md:text-5xl">
-                            Let&apos;s talk about your sport project.
-                        </h1>
-                        <p className="mt-6 max-w-[56ch] text-base leading-relaxed text-navy-500 md:text-lg">
-                            Fill out the form below and our team will get back to you, or reach us directly using the details on this page.
-                        </p>
-                    </Reveal>
-                </div>
-            </section>
+            <PageHero
+                breadcrumbItems={[{ label: "Contact" }]}
+                eyebrow="Contact"
+                title="Let's talk about your sport project."
+                description="Fill out the form below and our team will get back to you, or reach us directly using the details on this page."
+                imageSrc="/hero/contact.png" // [PLACEHOLDER: replace with real photo]
+                imageAlt="Sport Group Indonesia office"
+            />
 
-            <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
+            <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
                     {/* Contact information */}
                     <div className="lg:col-span-1">

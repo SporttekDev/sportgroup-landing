@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { Breadcrumb } from "@/components/breadcrumb";
-import { Reveal } from "@/components/motion/reveal";
+import { PageHero } from "@/components/page-hero";
 import { QuoteBlock } from "@/components/quote-block";
 import { BusinessLineGrid } from "@/components/business-line-grid";
 import { JourneyTimeline } from "@/components/motion/journey-timeline";
@@ -42,22 +41,14 @@ const journey = [
 export default function AboutUsPage() {
     return (
         <>
-            <section className="bg-white pt-24">
-                <div className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
-                    <Breadcrumb items={[{ label: "About Us" }]} />
-                    <Reveal mode="mount" className="mt-8 max-w-3xl">
-                        <span className="text-xs font-semibold uppercase tracking-wide text-navy-400">
-                            About Us
-                        </span>
-                        <h1 className="mt-2 font-display text-4xl font-semibold leading-display-safe tracking-tighter text-navy-900 md:text-5xl">
-                            A holding company built around one sport: growth.
-                        </h1>
-                        <p className="mt-6 text-base leading-relaxed text-navy-500 md:text-lg">
-                            SGI operates across contracting, technology, education, venues, investment, and tourism, with every business line designed to strengthen a different part of Indonesia&apos;s sport ecosystem.
-                        </p>
-                    </Reveal>
-                </div>
-            </section>
+            <PageHero
+                breadcrumbItems={[{ label: "About Us" }]}
+                eyebrow="About Us"
+                title="A holding company built around one sport: growth."
+                description="SGI operates across contracting, technology, education, venues, investment, and tourism, with every business line designed to strengthen a different part of Indonesia's sport ecosystem."
+                imageSrc="/hero/about-us.png" // [PLACEHOLDER: replace with real photo]
+                imageAlt="SGI team and facilities"
+            />
 
             <QuoteBlock
                 variant="quote"
