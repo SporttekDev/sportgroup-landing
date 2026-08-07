@@ -303,26 +303,28 @@ export function BusinessLineCarousel({
 
                 {/* Active slide info — bottom-left text, bottom-right CTA */}
                 <div className="mt-12 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between md:mt-16">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={current.slug}
-                            initial={reduce ? undefined : { opacity: 0, y: 12 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={reduce ? undefined : { opacity: 0, y: -12 }}
-                            transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-                            className="max-w-xl"
-                        >
-                            <h3 className="font-display text-2xl font-semibold leading-display-safe tracking-tight text-white sm:text-3xl">
-                                {current.name}
-                            </h3>
-                            <span className="mt-1 block text-xs font-semibold uppercase tracking-wide text-white/60">
-                                {current.category}
-                            </span>
-                            <p className="mt-3 max-w-[48ch] text-sm leading-relaxed text-white/75 sm:text-base">
-                                {current.tagline}
-                            </p>
-                        </motion.div>
-                    </AnimatePresence>
+                    <div className="min-h-[112px] sm:min-h-[132px]">
+                        <AnimatePresence mode="wait">
+                            <motion.div
+                                key={current.slug}
+                                initial={reduce ? undefined : { opacity: 0, y: 12 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={reduce ? undefined : { opacity: 0, y: -12 }}
+                                transition={{ duration: reduce ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+                                className="max-w-xl"
+                            >
+                                <h3 className="font-display text-2xl font-semibold leading-display-safe tracking-tight text-white sm:text-3xl line-clamp-1">
+                                    {current.name}
+                                </h3>
+                                <span className="mt-1 block text-xs font-semibold uppercase tracking-wide text-white/60">
+                                    {current.category}
+                                </span>
+                                <p className="mt-3 max-w-[48ch] text-sm leading-relaxed text-white/75 sm:text-base line-clamp-2">
+                                    {current.tagline}
+                                </p>
+                            </motion.div>
+                        </AnimatePresence>
+                    </div>
 
                     <Link
                         href={`/business-line/${current.slug}`}
