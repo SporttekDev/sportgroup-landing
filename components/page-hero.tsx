@@ -29,7 +29,7 @@ export function PageHero({
     imageAlt = "",
 }: PageHeroProps) {
     return (
-        <section className="relative flex min-h-[440px] items-center overflow-hidden bg-navy-900 pt-20">
+        <section className="relative flex items-center overflow-hidden bg-navy-900 pt-24">
             {imageSrc ? (
                 <>
                     <div className="absolute inset-0 mix-blend-overlay" aria-hidden>
@@ -56,7 +56,7 @@ export function PageHero({
                 />
             )}
 
-            <div className="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+            <div className="relative mx-auto w-full max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
                 <Breadcrumb variant="dark" items={breadcrumbItems} />
 
                 <Reveal mode="mount" className="mt-8 max-w-3xl">
