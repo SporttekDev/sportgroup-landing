@@ -11,7 +11,7 @@ export function SolutionCard({ solution }: SolutionCardProps) {
     return (
         <Link
             href={`/solution/${solution.slug}`}
-            className="group flex flex-col rounded-xl border border-navy-100 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-navy-md"
+            className="group flex h-full flex-col rounded-xl border border-navy-100 bg-white p-6 transition-all hover:-translate-y-1 hover:shadow-navy-md"
         >
             <div className="flex items-start justify-between gap-3">
                 <h3 className="font-display text-xl font-semibold text-navy-900">

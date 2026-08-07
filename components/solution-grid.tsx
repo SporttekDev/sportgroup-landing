@@ -77,7 +77,11 @@ export function SolutionGrid({
                 className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
             >
                 {items.map((solution) => (
-                    <motion.div key={solution.slug} variants={reduce ? undefined : item}>
+                    <motion.div
+                        key={solution.slug}
+                        variants={reduce ? undefined : item}
+                        className="h-full"
+                    >
                         <SolutionCard solution={solution} />
                     </motion.div>
                 ))}
