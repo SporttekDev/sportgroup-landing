@@ -8,6 +8,7 @@ import { SolutionGrid } from "@/components/solution-grid";
 import { ContactCTASection } from "@/components/contact-cta-section";
 import { Navbar } from "@/components/navbar";
 import Image from "next/image";
+import { BusinessLineCarousel } from "@/components/business-line-carousel";
 
 export const metadata: Metadata = {
   title: "Sport Group Indonesia | Building the Future of Indonesian Sport",
@@ -52,26 +53,14 @@ export default function HomePage() {
           </Reveal>
 
           <Reveal mode="mount" delay={0.2} y={16}>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-navy-800 lg:aspect-[3/4]">
-              <div
-                className="absolute inset-0 opacity-20"
-                // style={{
-                //   backgroundImage:
-                //     "radial-gradient(circle at 25% 25%, white 1.5px, transparent 1.5px)",
-                //   backgroundSize: "24px 24px",
-                // }}
-                aria-hidden
+            <div className="relative aspect-3/4 overflow-hidden rounded-2xl bg-navy-800">
+              <Image
+                src="/logos/sport-group-indonesia-white.png"
+                alt="Sport Group Indonesia"
+                fill
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
               />
-              <div className="absolute inset-0 p-8">
-                <Image
-                  src="/logos/sport-group-indonesia.png"
-                  alt="Sport Group Indonesia"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
-              </div>
-              {/* [PLACEHOLDER: replace with real SGI facility / venue photography] */}
             </div>
           </Reveal>
         </div>
@@ -105,11 +94,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <BusinessLineGrid
+      <BusinessLineCarousel
         eyebrow="What We Do"
         title="Our Business Lines"
         description="Seven business lines covering every layer of the sports ecosystem, from field of play to travel."
-        limit={3}
+        
         showViewAll
       />
 

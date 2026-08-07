@@ -2,12 +2,13 @@ import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { businessLines } from "@/data/business-lines";
 import { solutions } from "@/data/solutions";
+import Image from "next/image";
 
 export function Footer() {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="border-t border-navy-100 bg-navy-950 text-navy-200">
+        <footer className="bg-navy-950 text-navy-200">
             <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
                     <div className="md:col-span-1">
@@ -15,9 +16,13 @@ export function Footer() {
                             href="/"
                             className="flex items-center gap-2 font-display text-lg font-semibold text-white"
                         >
-                            <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-sm font-bold text-navy-900">
-                                SGI
-                            </span>
+                            <Image
+                                src="/logos/sport-group-indonesia-white.png"
+                                alt="Sport Group Indonesia Logo"
+                                width={100}
+                                height={100}
+                                className="relative h-10 w-10 object-contain"
+                            />
                             Sport Group Indonesia
                         </Link>
                         <p className="mt-4 max-w-[32ch] text-sm leading-relaxed text-navy-300">
