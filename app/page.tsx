@@ -98,7 +98,6 @@ export default function HomePage() {
         eyebrow="What We Do"
         title="Our Business Lines"
         description="Seven business lines covering every layer of the sports ecosystem, from field of play to travel."
-        
         showViewAll
       />
 

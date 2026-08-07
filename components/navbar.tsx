@@ -92,7 +92,7 @@ export function Navbar() {
                 </div>
 
                 <div className="hidden md:block">
-                    <Button asChild className={showLightText ? "border-white/25 bg-white/10 text-white/85 backdrop-blur-md hover:bg-white/40" : "bg-navy-800 text-white hover:bg-navy-700"}>
+                    <Button asChild className={showLightText ? "border border-white/25 bg-white/10 text-white backdrop-blur-md hover:bg-white/20" : "bg-navy-800 text-white hover:bg-navy-700"}>
                         <Link href="/contact">Contact Us</Link>
                     </Button>
                 </div>
