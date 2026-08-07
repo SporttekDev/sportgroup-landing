@@ -14,29 +14,30 @@ export const metadata: Metadata = {
 const journey = [
     {
         year: "2019",
-        title: "Awal Berdiri",
+        title: "Company Founded",
         description:
-            "Sport Group Indonesia didirikan dengan visi menghadirkan ekosistem olahraga yang terintegrasi, dimulai dari lini bisnis kontraktor infrastruktur olahraga.",
+            "Sport Group Indonesia was established with the vision of creating an integrated sports ecosystem, beginning with its sports infrastructure contracting business.",
     },
     {
         year: "2020",
-        title: "Ekspansi Lini Bisnis",
+        title: "Business Expansion",
         description:
-            "SGI mulai merambah ke sektor teknologi dan edukasi olahraga, memperluas jangkauan layanan untuk mendukung pengembangan talenta dan fasilitas olahraga di Indonesia.",
+            "SGI expanded into sports technology and sports education, broadening its range of services to support talent development and sports facilities across Indonesia.",
     },
     {
         year: "2021",
-        title: "Pengembangan Venue & Fasilitas",
+        title: "Venue & Facility Development",
         description:
-            "Peluncuran lini bisnis venue dan pengelolaan fasilitas olahraga, memperkuat akses masyarakat terhadap sarana olahraga berkualitas di berbagai daerah.",
+            "SGI launched its venue and sports facility management business, strengthening public access to high-quality sports facilities across various regions of Indonesia.",
     },
     {
         year: "2022",
-        title: "Investasi & Pariwisata Olahraga",
+        title: "Sports Investment & Tourism",
         description:
-            "SGI melengkapi tujuh lini bisnisnya dengan membuka peluang investasi dan pariwisata olahraga, menjadikan ekosistem olahraga nasional semakin berkelanjutan dan menyeluruh.",
+            "SGI completed its seven integrated business lines by introducing sports investment and sports tourism, creating a more comprehensive and sustainable national sports ecosystem.",
     },
 ];
+
 
 export default function AboutUsPage() {
     return (
@@ -64,28 +65,29 @@ export default function AboutUsPage() {
                 <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-16">
                     <div className="rounded-xl border border-navy-100 p-8">
                         <span className="inline-flex items-center rounded-full bg-navy-50 px-3 py-1 text-xs font-semibold text-navy-700">
-                            Visi
+                            Vision
                         </span>
                         <h2 className="mt-3 font-display text-2xl font-semibold text-navy-900">
-                            Menjadi ekosistem olahraga terintegrasi terdepan di Indonesia yang menghadirkan olahraga untuk semua.
+                            To become Indonesia’s leading integrated sports ecosystem that brings sports to everyone.
                         </h2>
                         <p className="mt-4 text-sm leading-relaxed text-navy-500">
-                            Kami membangun rantai nilai olahraga secara menyeluruh, mulai dari infrastruktur, teknologi, edukasi, hingga pariwisata olahraga, agar semakin banyak masyarakat Indonesia dapat mengakses fasilitas dan pengalaman olahraga berkualitas. Melalui tujuh lini bisnis yang saling terhubung, SGI berupaya menjadi rujukan utama dalam pengembangan ekosistem olahraga nasional.
+                            We are building the sports value chain holistically, from infrastructure and technology to education and sports tourism, so that more Indonesians can access quality sports facilities and experiences. Through seven interconnected business lines, SGI strives to become a key reference in the development of Indonesia’s national sports ecosystem.
                         </p>
                     </div>
                     <div className="rounded-xl border border-navy-100 p-8">
                         <span className="inline-flex items-center rounded-full bg-navy-50 px-3 py-1 text-xs font-semibold text-navy-700">
-                            Misi
+                            Mission
                         </span>
                         <h2 className="mt-3 font-display text-2xl font-semibold text-navy-900">
-                            Menghubungkan infrastruktur, teknologi, dan talenta olahraga dalam satu ekosistem yang berkelanjutan.
+                            To connect sports infrastructure, technology, and talent within one sustainable ecosystem.
                         </h2>
                         <p className="mt-4 text-sm leading-relaxed text-navy-500">
-                            SGI berkomitmen menghadirkan solusi infrastruktur dan teknologi olahraga yang andal, mengembangkan talenta melalui akademi dan program pembinaan, memperluas akses fasilitas olahraga bagi komunitas, serta membuka peluang investasi dan pariwisata olahraga yang berkelanjutan di seluruh Indonesia.
+                            SGI is committed to delivering reliable sports infrastructure and technology solutions, developing talent through academies and training programs, expanding access to sports facilities for communities, and creating sustainable sports investment and tourism opportunities across Indonesia.
                         </p>
                     </div>
                 </div>
             </section>
+
 
             <div className="border-t border-navy-100 bg-navy-50">
                 <BusinessLineGrid
@@ -103,7 +105,7 @@ export default function AboutUsPage() {
                         Our History
                     </span>
                     <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-navy-900 md:text-4xl">
-                        Jejak Langkah
+                        Track Record
                     </h2>
                 </div>
 
