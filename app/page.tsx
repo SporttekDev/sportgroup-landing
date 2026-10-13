@@ -9,6 +9,8 @@ import { ContactCTASection } from "@/components/contact-cta-section";
 import { Navbar } from "@/components/navbar";
 import Image from "next/image";
 import { BusinessLineCarousel } from "@/components/business-line-carousel";
+import { getBusinessLines } from "@/lib/cms/business-lines";
+import { getSolutions } from "@/lib/cms/solutions";
 
 export const metadata: Metadata = {
   title: "Sport Group Indonesia | Building the Future of Indonesian Sport",
@@ -16,7 +18,12 @@ export const metadata: Metadata = {
     "Sport Group Indonesia (SGI) is a sports-industry holding company spanning contracting, technology platforms, academies, venues, investment, and sport tourism.",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [businessLines, solutions] = await Promise.all([
+    getBusinessLines(),
+    getSolutions(),
+  ]);
+
   return (
     <>
       {/* Hero — split layout, anti-center-bias */}
@@ -99,6 +106,7 @@ export default function HomePage() {
         title="Our Business Lines"
         description="Seven business lines covering every layer of the sports ecosystem, from field of play to travel."
         showViewAll
+        businessLines={businessLines}
       />
 
       <div className="border-t border-navy-100">
@@ -108,6 +116,7 @@ export default function HomePage() {
           description="Service offerings that draw on multiple business lines to solve a single problem for our partners."
           limit={3}
           showViewAll
+          solutions={solutions}
         />
       </div>
 

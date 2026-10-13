@@ -4,6 +4,7 @@ import { QuoteBlock } from "@/components/quote-block";
 import { BusinessLineGrid } from "@/components/business-line-grid";
 import { JourneyTimeline } from "@/components/motion/journey-timeline";
 import { ContactCTASection } from "@/components/contact-cta-section";
+import { getBusinessLines } from "@/lib/cms/business-lines";
 
 export const metadata: Metadata = {
     title: "About Us | Sport Group Indonesia",
@@ -39,7 +40,9 @@ const journey = [
 ];
 
 
-export default function AboutUsPage() {
+export default async function AboutUsPage() {
+    const businessLines = await getBusinessLines();
+
     return (
         <>
             <PageHero
@@ -95,6 +98,7 @@ export default function AboutUsPage() {
                     description="Each business line below plays a distinct role inside SGI's holding structure."
                     limit={3}
                     showViewAll
+                    businessLines={businessLines}
                 />
             </div>
 

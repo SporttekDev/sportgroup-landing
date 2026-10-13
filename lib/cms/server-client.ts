@@ -1,0 +1,97 @@
+// lib/cms/server-client.ts
+// HANYA untuk Server Component, generateMetadata, dan generateStaticParams.
+// Jangan diimport dari client component ("use client").
+
+import "server-only";
+
+const API_URL = process.env.LARAVEL_API_URL?.replace(/\/$/, "");
+const API_KEY = process.env.LARAVEL_API_KEY;
+const DOMAIN = process.env.LARAVEL_COMPANY_DOMAIN;
+
+export type CmsContent = {
+    id: string;
+    title: string;
+    slug: string;
+    excerpt: string | null;
+    body: string | null;
+    cover_image_url: string | null;
+    display_order: number;
+    is_published: boolean;
+    published_at: string | null;
+    content_type: {
+        slug: string;
+        display_name: string;
+    };
+    attributes: Record<string, unknown>;
+    children?: CmsContent[];
+    created_at: string;
+    updated_at: string;
+};
+
+// Format response Laravel: { status, message, data }
+type CmsResponse<T> = {
+    status: boolean;
+    message: string;
+    data: T;
+};
+
+export class CmsNotFoundError extends Error {
+    constructor(path: string) {
+        super(`CMS content not found: ${path}`);
+        this.name = "CmsNotFoundError";
+    }
+}
+
+async function fetchCms<T>(path: string): Promise<T> {
+    if (!API_URL || !API_KEY || !DOMAIN) {
+        throw new Error(
+            "Missing env: LARAVEL_API_URL, LARAVEL_API_KEY, LARAVEL_COMPANY_DOMAIN"
+        );
+    }
+
+    const res = await fetch(`${API_URL}/api/public/${path}`, {
+        headers: {
+            "Content-Type": "application/json",
+            "X-API-KEY": API_KEY,
+            "X-Company-Domain": DOMAIN,
+        },
+        next: { revalidate: 60 },
+        signal: AbortSignal.timeout(10000),
+    });
+
+    if (res.status === 404) {
+        throw new CmsNotFoundError(path);
+    }
+
+    if (!res.ok) {
+        // Jangan log header (berisi API key).
+        throw new Error(`CMS error ${res.status} ${res.statusText} for ${path}`);
+    }
+
+    const json = (await res.json()) as CmsResponse<T>;
+    return json.data;
+}
+
+/**
+ * List semua konten published dari satu content type.
+ * @example listContents("company")
+ */
+export function listContents(contentType: string): Promise<CmsContent[]> {
+    const params = new URLSearchParams({ content_type: contentType });
+    return fetchCms<CmsContent[]>(`contents?${params}`);
+}
+
+/**
+ * Resolve konten lewat rantai slug (parent -> child).
+ * @example resolveContent(["playpro"], "company")
+ */
+export function resolveContent(
+    slugs: string[],
+    contentType?: string
+): Promise<CmsContent> {
+    const path = slugs.filter(Boolean).join("/");
+    const params = new URLSearchParams();
+    if (contentType) params.set("content_type", contentType);
+    const query = params.toString() ? `?${params}` : "";
+    return fetchCms<CmsContent>(`contents/${path}${query}`);
+}

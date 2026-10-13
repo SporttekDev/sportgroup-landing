@@ -9,22 +9,23 @@ import { ContactCTASection } from "@/components/contact-cta-section";
 import {
     getSolutionBySlug,
     getAllSolutionSlugs,
-} from "@/data/solutions";
-import { businessLines } from "@/data/business-lines";
+} from "@/lib/cms/solutions";
+import { getBusinessLines } from "@/lib/cms/business-lines";
 
 interface SolutionDetailPageProps {
     params: Promise<{ slug: string }>;
 }
 
-export function generateStaticParams() {
-    return getAllSolutionSlugs().map((slug) => ({ slug }));
+export async function generateStaticParams() {
+    const slugs = await getAllSolutionSlugs();
+    return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
     params,
 }: SolutionDetailPageProps): Promise<Metadata> {
     const { slug } = await params;
-    const solution = getSolutionBySlug(slug);
+    const solution = await getSolutionBySlug(slug);
 
     if (!solution) {
         return { title: "Solution Not Found | Sport Group Indonesia" };
@@ -40,15 +41,16 @@ export default async function SolutionDetailPage({
     params,
 }: SolutionDetailPageProps) {
     const { slug } = await params;
-    const solution = getSolutionBySlug(slug);
+    const solution = await getSolutionBySlug(slug);
 
     if (!solution) {
         notFound();
     }
 
-    const relatedBusinessLines = businessLines
-        .filter((line) => solution.relatedBusinessLineSlugs.includes(line.slug))
-        .sort((a, b) => a.order - b.order);
+    const allLines = await getBusinessLines();
+    const relatedBusinessLines = allLines.filter((line) =>
+        solution.relatedBusinessLineSlugs.includes(line.slug)
+    );
 
     return (
         <>

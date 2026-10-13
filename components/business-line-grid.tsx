@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { businessLines } from "@/data/business-lines";
+import type { BusinessLine } from "@/data/business-lines";
 import { BusinessLineCard } from "@/components/business-line-card";
 
 interface BusinessLineGridProps {
+    /** Data dari CMS, diambil oleh halaman server. */
+    businessLines: BusinessLine[];
     eyebrow?: string;
     title?: string;
     description?: string;
@@ -31,6 +33,7 @@ const item = {
 };
 
 export function BusinessLineGrid({
+    businessLines,
     eyebrow,
     title = "Our Business Lines",
     description,

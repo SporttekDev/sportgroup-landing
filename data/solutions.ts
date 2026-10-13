@@ -17,7 +17,7 @@ export interface Solution {
     description: string[];
     relatedBusinessLineSlugs: string[];
     exampleUseCase: string;
-    isDraft: true;
+    isDraft: boolean;
     order: number;
 }
 

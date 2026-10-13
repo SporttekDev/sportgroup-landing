@@ -12,9 +12,11 @@ import {
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getBusinessLineIcon } from "@/lib/business-line-icons";
-import { businessLines } from "@/data/business-lines";
+import type { BusinessLine } from "@/data/business-lines";
 
 interface BusinessLineCarouselProps {
+    /** Data dari CMS, diambil oleh halaman server. */
+    businessLines: BusinessLine[];
     eyebrow?: string;
     title?: string;
     description?: string;
@@ -86,6 +88,7 @@ function ArrowButton({
  * arrows move to a small paired cluster top-right, above the card stage.
  */
 export function BusinessLineCarousel({
+    businessLines,
     eyebrow,
     title = "Our Business Lines",
     description,

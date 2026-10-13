@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/page-hero";
 import { SolutionGrid } from "@/components/solution-grid";
 import { ContactCTASection } from "@/components/contact-cta-section";
+import { getSolutions } from "@/lib/cms/solutions";
 
 export const metadata: Metadata = {
     title: "Solution | Sport Group Indonesia",
@@ -9,7 +10,9 @@ export const metadata: Metadata = {
         "Cross-business-line solutions from Sport Group Indonesia, combining multiple business lines to solve a single partner need.",
 };
 
-export default function SolutionPage() {
+export default async function SolutionPage() {
+    const solutions = await getSolutions();
+
     return (
         <>
             <PageHero
@@ -30,7 +33,7 @@ export default function SolutionPage() {
                 </div>
             </div> */}
 
-            <SolutionGrid title="All Solutions" />
+            <SolutionGrid title="All Solutions" solutions={solutions} />
 
             <ContactCTASection variant="solution" />
         </>

@@ -41,13 +41,23 @@ export interface BusinessLine {
      * via mix-blend-overlay, same technique as BusinessLinesCarousel.
      */
     bgSrc?: string;
+    /**
+     * Optional external links, rendered as CTA buttons below the tagline
+     * on the [slug] detail hero. Both are independent and optional —
+     * render whichever is set, render neither if both are absent. All
+     * values below are DUMMY placeholders per instruction; replace with
+     * confirmed URLs before shipping search "DUMMY:" to find them.
+     */
+    website?: string;
+    instagram?: string;
+    gallery?: string[];
 }
 
 export const businessLines: BusinessLine[] = [
     {
         slug: "sport-teknologi-indonesia",
         name: "Sport Teknologi Indonesia",
-        shortName: "STI",
+        shortName: "Sport Teknologi Indonesia",
         category: "Sports Contractor",
         tagline: "Field of play, equipment, and event infrastructure built to competition standard.",
         summary:
@@ -70,6 +80,9 @@ export const businessLines: BusinessLine[] = [
         logo: "/logos/sport-teknologi-indonesia.png",
         accent: "#630909",
         bgSrc: "/background/sti.png",
+        // DUMMY: replace with confirmed URLs.
+        website: "https://sportteknologi.id",
+        instagram: "https://instagram.com/sportteknologi.id",
     },
     {
         slug: "playpro",
@@ -97,6 +110,9 @@ export const businessLines: BusinessLine[] = [
         logo: "/logos/playpro.png",
         accent: "#661b20",
         bgSrc: "/background/playpro.png",
+        // DUMMY: replace with confirmed URLs.
+        website: "https://playpro.id",
+        instagram: "https://instagram.com/playpro.id",
     },
     {
         slug: "playpro-academy",
@@ -123,6 +139,9 @@ export const businessLines: BusinessLine[] = [
         logo: "/logos/playpro-academy.png",
         accent: "#275466",
         bgSrc: "/background/ppa.png",
+        // DUMMY: replace with confirmed URLs.
+        website: "https://playproacademy.id",
+        instagram: "https://instagram.com/playproacademy.id",
     },
     {
         slug: "playpro-sports-arena",
@@ -149,6 +168,9 @@ export const businessLines: BusinessLine[] = [
         logo: "/logos/playpro-sports-arena.png",
         accent: "#344e26",
         bgSrc: "/background/psa.png",
+        // DUMMY: replace with confirmed URLs.
+        website: "https://playprosportsarena.id",
+        instagram: "https://instagram.com/playprosportsarena",
     },
     {
         slug: "lapanganpickle-id",
@@ -179,6 +201,10 @@ export const businessLines: BusinessLine[] = [
         logo: "/logos/lapangan-pickle.png",
         accent: "#234135",
         bgSrc: "/background/lpid.png",
+        // DUMMY: replace with confirmed URLs (the brand name doubles as a
+        // plausible domain, but that has not been verified as live/correct).
+        website: "https://lapanganpickle.id",
+        instagram: "https://instagram.com/lapanganpickle.id",
     },
     {
         slug: "sport-growth-indonesia",
@@ -204,11 +230,14 @@ export const businessLines: BusinessLine[] = [
         logo: "/logos/sport-growth-indonesia.png",
         accent: "#376456",
         bgSrc: "/background/growth.png",
+        // DUMMY: replace with confirmed URLs.
+        website: "https://sportgrowth.id",
+        instagram: "https://instagram.com/sportgrowth.indonesia",
     },
     {
         slug: "from-the-origin",
         name: "From The Origin",
-        shortName: "FTO",
+        shortName: "From The Origin",
         category: "Sport Tourism",
         tagline: "Tailor-made sport travel corporate, community, and private journeys.",
         summary:
@@ -231,6 +260,9 @@ export const businessLines: BusinessLine[] = [
         logo: "/logos/from-the-origin.png",
         accent: "#6e161c",
         bgSrc: "/background/fto.png",
+        // DUMMY: replace with confirmed URLs.
+        website: "https://fromtheorigin.id",
+        instagram: "https://instagram.com/fromtheorigin.id",
     },
 ];
 

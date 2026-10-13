@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { solutions } from "@/data/solutions";
+import type { Solution } from "@/data/solutions";
 import { SolutionCard } from "@/components/solution-card";
 
 interface SolutionGridProps {
+    /** Data dari CMS, diambil oleh halaman server. */
+    solutions: Solution[];
     eyebrow?: string;
     title?: string;
     description?: string;
@@ -29,6 +31,7 @@ const item = {
 };
 
 export function SolutionGrid({
+    solutions,
     eyebrow,
     title = "Our Solutions",
     description,
