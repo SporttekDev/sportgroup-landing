@@ -15,6 +15,7 @@ import {
     MapPin,
     Globe,
     type LucideIcon,
+    ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -211,10 +212,12 @@ export default async function BusinessLineDetailPage({
                                             href={businessLine.website}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20"
+                                            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-navy-900 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:shadow-xl"
+                                            style={hasTheme ? { color: businessLine.accent } : undefined}
                                         >
                                             <Globe className="h-4 w-4" />
                                             Visit Website
+                                            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                                         </a>
                                     )}
                                     {businessLine.instagram && (
