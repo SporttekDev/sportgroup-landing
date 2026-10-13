@@ -21,6 +21,7 @@ import {
 import {
     asString,
     asStringArray,
+    asStringList,
     htmlToParagraphs,
     resolveImage,
 } from "./utils";
@@ -31,7 +32,7 @@ export function toBusinessLine(content: CmsContent): BusinessLine {
     const attrs = content.attributes ?? {};
 
     const paragraphs = htmlToParagraphs(content.body);
-    const gallery = asStringArray(attrs.gallery)
+    const gallery = asStringList(attrs.gallery)
         .map(resolveImage)
         .filter((url): url is string => Boolean(url));
 
@@ -58,11 +59,27 @@ export function toBusinessLine(content: CmsContent): BusinessLine {
     };
 }
 
+// Daftar business line dipakai untuk bagian pelengkap (mis. "Other Business
+// Lines") dan generateStaticParams. Jika CMS gagal dijangkau (timeout, 5xx,
+// env belum diisi), kembalikan daftar kosong dan catat error-nya, supaya satu
+// kegagalan sementara tidak menjatuhkan seluruh halaman.
 export async function getBusinessLines(): Promise<BusinessLine[]> {
-    const items = await listContents(CONTENT_TYPE);
-    return items.map(toBusinessLine).sort((a, b) => a.order - b.order);
+    try {
+        const items = await listContents(CONTENT_TYPE);
+        return items.map(toBusinessLine).sort((a, b) => a.order - b.order);
+    } catch (error) {
+        console.error(
+            "[cms] getBusinessLines failed:",
+            error instanceof Error ? `${error.name}: ${error.message}` : error
+        );
+        return [];
+    }
 }
 
+// Sengaja TIDAK menelan error selain CmsNotFoundError. Jika CMS timeout dan
+// fungsi ini mengembalikan null, halaman akan memanggil notFound() dan 404
+// itu bisa ikut tersimpan di cache. Dengan melempar error, Next.js tetap
+// memakai versi halaman terakhir yang berhasil saat revalidasi gagal.
 export async function getBusinessLineBySlug(
     slug: string
 ): Promise<BusinessLine | null> {

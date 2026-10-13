@@ -13,6 +13,12 @@ export const asStringArray = (value: unknown): string[] =>
         ? value.filter((item): item is string => typeof item === "string")
         : [];
 
+/** Array string, atau satu string tunggal (mis. satu file dari form admin). */
+export const asStringList = (value: unknown): string[] => {
+    if (typeof value === "string") return value.length > 0 ? [value] : [];
+    return asStringArray(value);
+};
+
 const NAMED_ENTITIES: Record<string, string> = {
     amp: "&",
     lt: "<",
@@ -59,22 +65,25 @@ export function htmlToParagraphs(html: string | null | undefined): string[] {
 }
 
 /**
- * - URL penuh (http/https)      -> dipakai apa adanya
- * - path "/storage/..." (CMS)   -> ditambah origin API CMS
- * - path lain ("/logos/...")    -> file lokal di folder public SGI
- *
- * next/image mewajibkan path lokal diawali "/" (atau URL absolut), jadi path
- * tanpa slash di depan dinormalkan.
+ * Aturan path gambar:
+ * - URL penuh (http/https)              -> dipakai apa adanya
+ * - diawali "/" selain "/storage/"      -> file lokal di folder public SGI,
+ *                                          mis. "/logos/x.png", "/background/x.png"
+ * - selain itu                          -> file di storage CMS:
+ *     "/storage/company/x.webp", "storage/company/x.webp", dan
+ *     "company/x.webp" (path relatif yang disimpan panel admin saat upload)
+ *     semuanya menjadi  {origin CMS}/storage/company/x.webp
  */
 export function resolveImage(path: string | null | undefined): string | undefined {
     const value = path?.trim();
     if (!value) return undefined;
     if (/^https?:\/\//i.test(value)) return value;
 
-    const normalized = value.startsWith("/") ? value : `/${value}`;
+    if (value.startsWith("/") && !value.startsWith("/storage/")) return value;
 
-    if (normalized.startsWith("/storage/") && API_ORIGIN) {
-        return `${API_ORIGIN}${normalized}`;
-    }
-    return normalized;
+    if (!API_ORIGIN) return undefined;
+
+    // Buang awalan "storage/" (juga yang ganda) lalu susun ulang satu kali.
+    const relative = value.replace(/^\/?(storage\/)+/, "").replace(/^\/+/, "");
+    return `${API_ORIGIN}/storage/${relative}`;
 }
