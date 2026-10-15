@@ -75,9 +75,13 @@ async function fetchWithRetry(
 
 async function fetchCms<T>(path: string): Promise<T> {
     if (!API_URL || !API_KEY || !DOMAIN) {
-        throw new Error(
-            "Missing env: LARAVEL_API_URL, LARAVEL_API_KEY, LARAVEL_COMPANY_DOMAIN"
-        );
+        const missing = [
+            !API_URL && "LARAVEL_API_URL",
+            !API_KEY && "LARAVEL_API_KEY",
+            !DOMAIN && "LARAVEL_COMPANY_DOMAIN",
+        ].filter(Boolean);
+        throw new Error(`Missing env: ${missing.join(", ")}`);
+
     }
 
     const res = await fetchWithRetry(`${API_URL}/api/public/${path}`, {
