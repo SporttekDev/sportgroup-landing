@@ -4,6 +4,7 @@ import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { SiteChrome } from "@/components/site-chrome";
 
 // Heading: Archivo — grotesk tegas, terminal kotak, athletic
 const archivo = Archivo({
@@ -42,9 +43,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <TooltipProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <SiteChrome navbar={<Navbar />} footer={<Footer />}>
+            {children}
+          </SiteChrome>
         </TooltipProvider>
       </body>
     </html>
