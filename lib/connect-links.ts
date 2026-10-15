@@ -65,7 +65,7 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
         name: "Sport Teknologi Indonesia",
         shortName: "STI",
         category: "Sports Contractor",
-        tagline: "Konstruksi lapangan, peralatan, dan infrastruktur event berstandar kompetisi.",
+        tagline: "All-in-One Field, Equipment & Event Solutions",
         logoSrc: "/logos/sport-teknologi-indonesia.png",
         accent: "#630909",
         eventName: "",
