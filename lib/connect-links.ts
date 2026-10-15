@@ -25,7 +25,7 @@ export const CONNECT = {
      * Nama acara (opsional). Dipakai di badge header, judul tab, dan teks pesan
      * WhatsApp. Kosongkan ("") setelah acara selesai agar halaman bersifat umum.
      */
-    eventName: "Pameran Konstruksi Lapangan",
+    eventName: "ISFEX",
     /** Nama perusahaan di header halaman. */
     title: "Sport Group Indonesia",
     tagline: "Hubungi tim kami atau unduh brosur langsung dari sini.",
@@ -45,9 +45,9 @@ export const CONNECT = {
     // TODO: isi dengan data sebenarnya.
     sales: [
         // { name: "Nama Sales", role: "Konstruksi lapangan", phone: "0812xxxxxxxx" },
-        { name: "Qiboi", role: "IT", phone: "082190182160" },
-        { name: "Ferry", role: "Playpro", phone: "082190182160" },
-        { name: "Haykal", role: "Sales", phone: "082190182160" },
+        { name: "Iyan", role: "Sales", phone: "085156239714" },
+        { name: "Rizky", role: "Sales", phone: "087780216333" },
+        { name: "Haykal", role: "Sales", phone: "085693815606" },
     ] as SalesContact[],
 
     // TODO: taruh file PDF di /public/brosur lalu isi path-nya.
