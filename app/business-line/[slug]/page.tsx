@@ -5,19 +5,13 @@ import { notFound } from "next/navigation";
 import {
     ArrowRight,
     CheckCircle2,
-    Hammer,
-    Smartphone,
-    GraduationCap,
-    Trophy,
-    CircleDot,
-    TrendingUp,
-    Plane,
     MapPin,
     Globe,
-    type LucideIcon,
     ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getBusinessLineIcon } from "@/lib/business-line-icons";
+import { BusinessLineIcon } from "@/lib/business-line-icons";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Reveal } from "@/components/motion/reveal";
@@ -29,6 +23,7 @@ import {
     getBusinessLineBySlug,
     getAllBusinessLineSlugs,
 } from "@/lib/cms/business-lines";
+import { isRemoteImage } from "@/lib/is-remote-image";
 
 // lucide-react dropped brand icons (Instagram, Facebook, etc.) in recent
 // versions, so this is a manual SVG matching lucide's own stroke style
@@ -53,20 +48,6 @@ function InstagramIcon({ className }: { className?: string }) {
         </svg>
     );
 }
-
-const CATEGORY_ICON: Record<string, LucideIcon> = {
-    "sport-teknologi-indonesia": Hammer,
-    playpro: Smartphone,
-    "playpro-academy": GraduationCap,
-    "playpro-sports-arena": Trophy,
-    "lapanganpickle-id": CircleDot,
-    "sport-growth-indonesia": TrendingUp,
-    "from-the-origin": Plane,
-};
-
-// Remote (CMS) images skip the Next.js optimizer to avoid upstream timeouts
-// on slow CMS responses; local /public files still get optimized.
-const isRemoteImage = (src: string) => /^https?:\/\//i.test(src);
 
 interface BusinessLineDetailPageProps {
     params: Promise<{ slug: string }>;
@@ -103,7 +84,6 @@ export default async function BusinessLineDetailPage({
         notFound();
     }
 
-    const Icon = CATEGORY_ICON[businessLine.slug] ?? Hammer;
 
     // Themed hero is a deliberate, scoped exception to the site's single
     // navy accent system (mirrors BusinessLinesCarousel). Entries without
@@ -190,7 +170,10 @@ export default async function BusinessLineDetailPage({
                                             className="h-8 w-8 object-contain"
                                         />
                                     ) : (
-                                        <Icon className="h-6 w-6 text-white" strokeWidth={1.5} />
+                                        <BusinessLineIcon
+                                            slug={businessLine.slug}
+                                            className="h-6 w-6 text-navy-800"
+                                        />
                                     )}
                                 </div>
                                 <span className="text-xs font-semibold uppercase tracking-wide text-white/70">

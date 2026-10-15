@@ -11,8 +11,9 @@ import {
 } from "framer-motion";
 import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getBusinessLineIcon } from "@/lib/business-line-icons";
+import { BusinessLineIcon } from "@/lib/business-line-icons";
 import type { BusinessLine } from "@/data/business-lines";
+import { isRemoteImage } from "@/lib/is-remote-image";
 
 interface BusinessLineCarouselProps {
     /** Data dari CMS, diambil oleh halaman server. */
@@ -86,6 +87,9 @@ function ArrowButton({
  * Arrow placement is responsive: on desktop (md+) the arrows flank the card
  * track. On mobile/tablet (<md), flanking would crowd the viewport, so the
  * arrows move to a small paired cluster top-right, above the card stage.
+ *
+ * Remote (CMS) images skip the Next.js optimizer (unoptimized), same as the
+ * detail hero, to avoid upstream timeouts on slow CMS responses.
  */
 export function BusinessLineCarousel({
     businessLines,
@@ -161,6 +165,7 @@ export function BusinessLineCarousel({
                             alt=""
                             fill
                             priority
+                            unoptimized={isRemoteImage(current.bgSrc as string)}
                             sizes="100vw"
                             className="object-cover"
                         />
@@ -253,7 +258,6 @@ export function BusinessLineCarousel({
                                     if (Math.abs(offset) > VISIBLE_OFFSET_RANGE) return null;
 
                                     const slot = SLOT_STYLE[offset];
-                                    const Icon = getBusinessLineIcon(line.slug);
                                     const isActive = offset === 0;
 
                                     return (
@@ -286,10 +290,14 @@ export function BusinessLineCarousel({
                                                         alt={line.name}
                                                         width={150}
                                                         height={150}
+                                                        unoptimized={isRemoteImage(line.logo)}
                                                         className="h-24 w-24 object-contain sm:h-32 sm:w-32 md:h-40 md:w-40"
                                                     />
                                                 ) : (
-                                                    <Icon className="h-9 w-9 text-navy-800 sm:h-11 sm:w-11" strokeWidth={1.5} />
+                                                    <BusinessLineIcon
+                                                        slug={line.slug}
+                                                        className="h-9 w-9 text-navy-800 sm:h-11 sm:w-11"
+                                                    />
                                                 )}
                                             </span>
                                         </motion.button>

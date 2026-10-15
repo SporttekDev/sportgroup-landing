@@ -29,6 +29,36 @@ import {
 
 const CONTENT_TYPE = "company";
 
+/**
+ * Ambil satu gambar dari field yang bentuknya bisa bermacam-macam:
+ * - string tunggal (data seeder lama): "/background/sti.png"
+ * - array string (upload dari panel admin): ["/storage/company/x.webp"]
+ * - objek / array objek: { url | path | src }
+ */
+function firstImage(value: unknown): string | undefined {
+    const first = Array.isArray(value) ? value[0] : value;
+
+    if (typeof first === "string") return resolveImage(first);
+
+    if (first && typeof first === "object") {
+        const obj = first as Record<string, unknown>;
+        return resolveImage(asString(obj.url ?? obj.path ?? obj.src));
+    }
+
+    return undefined;
+}
+
+/**
+ * Pastikan link eksternal punya protokol. Tanpa itu, "playpro-academy.id"
+ * dianggap link relatif oleh <a href> dan membuka /business-line/playpro-academy.id.
+ */
+function normalizeUrl(value: string | undefined): string | undefined {
+    const trimmed = value?.trim();
+    if (!trimmed) return undefined;
+    if (/^(https?:\/\/|mailto:|tel:)/i.test(trimmed)) return trimmed;
+    return `https://${trimmed.replace(/^\/+/, "")}`;
+}
+
 export function toBusinessLine(content: CmsContent): BusinessLine {
     const attrs = content.attributes ?? {};
 
@@ -55,9 +85,10 @@ export function toBusinessLine(content: CmsContent): BusinessLine {
         // Fallback ke attributes.logo untuk record lama.
         logo: resolveImage(content.cover_image_url) ?? resolveImage(asString(attrs.logo)),
         accent: asString(attrs.accent),
-        bgSrc: resolveImage(asString(attrs.bg_src)),
-        website: asString(attrs.website),
-        instagram: asString(attrs.instagram),
+        // string lokal (seeder), array string (upload admin), atau objek.
+        bgSrc: firstImage(attrs.bg_src),
+        website: normalizeUrl(asString(attrs.website)),
+        instagram: normalizeUrl(asString(attrs.instagram)),
         gallery: gallery.length ? gallery : undefined,
     };
 }
