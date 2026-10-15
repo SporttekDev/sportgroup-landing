@@ -64,13 +64,17 @@ const GROUP_ORDER: LinkGroup[] = ["sales", "materials", "more"];
 
 function LinkButton({ link }: { link: ConnectLink }) {
     const Icon = KIND_ICON[link.kind];
+    // Tautan internal (mis. /connect/sales yang mengalihkan ke WhatsApp) dan
+    // file unduhan dibuka di tab ini; tautan luar dibuka di tab baru.
+    // Sengaja <a> biasa, bukan <Link>, agar tidak di-prefetch (rute acak).
+    const isInternal = link.href.startsWith("/");
+    const sameTab = isInternal || link.download;
 
     return (
         <a
             href={link.href}
-            // wa.me membuka aplikasi WhatsApp; file brosur diunduh di tab ini.
-            target={link.download ? undefined : "_blank"}
-            rel={link.download ? undefined : "noopener noreferrer"}
+            target={sameTab ? undefined : "_blank"}
+            rel={sameTab ? undefined : "noopener noreferrer"}
             download={link.download ? true : undefined}
             className={cn(
                 "group flex w-full items-center gap-4 rounded-2xl px-5 py-4 text-left transition duration-200 active:scale-[0.99]",

@@ -35,15 +35,28 @@ export const CONNECT = {
     /** Teks awal pesan WhatsApp. Nama acara ditambahkan otomatis. */
     whatsappGreeting: "Halo, saya mengunjungi booth Anda di",
 
+    /**
+     * "rotate": satu tombol "Chat dengan Sales"; tiap ditekan diarahkan ke sales
+     *           yang dipilih acak (tidak sama dengan pilihan sebelumnya di HP itu).
+     * "list":   tiap sales punya tombol sendiri.
+     */
+    salesMode: "rotate" as "rotate" | "list",
+
+    // TODO: isi dengan data sebenarnya.
     sales: [
-        { name: "Nama Sales", role: "Konstruksi lapangan", phone: "0812xxxxxxxx" },
+        // { name: "Nama Sales", role: "Konstruksi lapangan", phone: "0812xxxxxxxx" },
+        { name: "Qiboi", role: "IT", phone: "082190182160" },
+        { name: "Ferry", role: "Playpro", phone: "082190182160" },
+        { name: "Haykal", role: "Sales", phone: "082190182160" },
     ] as SalesContact[],
 
+    // TODO: taruh file PDF di /public/brosur lalu isi path-nya.
     brochures: [
-        { label: "Company Profile", href: "/brosur/company-profile.pdf" },
+        { label: "Company Profile", href: "/brosur/compro.pdf" },
     ] as BrochureFile[],
 
-    website: "https://sportteknologi.id" as string,
+    // TODO: isi dengan alamat sebenarnya. Boleh tanpa "https://".
+    website: "sportteknologi.id" as string,
     instagram: "sporttek.id" as string,
 };
 
@@ -140,25 +153,72 @@ function normalizeFileHref(raw: string | undefined): string | undefined {
     return normalizeWebUrl(value);
 }
 
-export function buildConnectLinks(config: typeof CONNECT = CONNECT): ConnectLink[] {
-    const links: ConnectLink[] = [];
+export interface SalesTarget {
+    id: string;
+    name: string;
+    role?: string;
+    href: string;
+}
+
+/** Sales yang nomornya valid, lengkap dengan tautan WhatsApp-nya. */
+export function getSalesTargets(config: typeof CONNECT = CONNECT): SalesTarget[] {
     const message = config.eventName
         ? `${config.whatsappGreeting} ${config.eventName}. Saya ingin informasi lebih lanjut.`
         : "Halo, saya ingin informasi lebih lanjut.";
 
+    const targets: SalesTarget[] = [];
     config.sales.forEach((contact, index) => {
         const href = buildWhatsAppUrl(contact.phone, message);
         if (!href || !contact.name.trim()) return;
-        links.push({
-            id: `sales-${index}`,
-            kind: "whatsapp",
-            group: "sales",
-            label: `Chat ${contact.name.trim()}`,
-            description: contact.role?.trim() || "via WhatsApp",
+        targets.push({
+            id: String(index),
+            name: contact.name.trim(),
+            role: contact.role?.trim() || undefined,
             href,
-            primary: links.length === 0,
         });
     });
+    return targets;
+}
+
+/** Pilih sales acak; hindari `lastId` (sales sebelumnya) bila ada pilihan lain. */
+export function pickSalesTarget(
+    targets: SalesTarget[],
+    lastId?: string
+): SalesTarget | undefined {
+    if (targets.length === 0) return undefined;
+    const pool = targets.length > 1 ? targets.filter((t) => t.id !== lastId) : targets;
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+export const SALES_ROTATE_PATH = "/connect/sales";
+
+export function buildConnectLinks(config: typeof CONNECT = CONNECT): ConnectLink[] {
+    const links: ConnectLink[] = [];
+    const targets = getSalesTargets(config);
+
+    if (config.salesMode === "rotate" && targets.length > 0) {
+        links.push({
+            id: "sales-rotate",
+            kind: "whatsapp",
+            group: "sales",
+            label: "Chat dengan Sales",
+            description: "Tim kami siap membantu via WhatsApp",
+            href: SALES_ROTATE_PATH,
+            primary: true,
+        });
+    } else {
+        targets.forEach((target) => {
+            links.push({
+                id: `sales-${target.id}`,
+                kind: "whatsapp",
+                group: "sales",
+                label: `Chat ${target.name}`,
+                description: target.role || "via WhatsApp",
+                href: target.href,
+                primary: links.length === 0,
+            });
+        });
+    }
 
     config.brochures.forEach((file, index) => {
         const href = normalizeFileHref(file.href);
