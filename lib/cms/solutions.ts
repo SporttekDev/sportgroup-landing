@@ -19,7 +19,12 @@ import {
     resolveContent,
     type CmsContent,
 } from "./server-client";
-import { asString, asStringArray, htmlToParagraphs } from "./utils";
+import {
+    asString,
+    asStringArray,
+    htmlToParagraphs,
+    sanitizeBodyHtml,
+} from "./utils";
 
 const CONTENT_TYPE = "solution";
 
@@ -32,6 +37,8 @@ export function toSolution(content: CmsContent): Solution {
         tagline: asString(attrs.tagline) ?? "",
         summary: content.excerpt ?? "",
         description: htmlToParagraphs(content.body),
+        // HTML bersih dari editor CMS (tebal, tautan, daftar, dst.); kosong jika body kosong.
+        descriptionHtml: sanitizeBodyHtml(content.body),
         relatedBusinessLineSlugs: asStringArray(attrs.related_business_line_slugs),
         exampleUseCase: asString(attrs.example_use_case) ?? "",
         isDraft: attrs.is_draft === true,

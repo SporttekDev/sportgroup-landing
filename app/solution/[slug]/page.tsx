@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactCTASection } from "@/components/contact-cta-section";
+import { CmsContent } from "@/components/cms-content";
 import {
     getSolutionBySlug,
     getAllSolutionSlugs,
@@ -102,16 +103,20 @@ export default async function SolutionDetailPage({
                         <h2 className="font-display text-2xl font-semibold text-navy-900">
                             Overview
                         </h2>
-                        <div className="mt-4 space-y-4">
-                            {solution.description.map((paragraph, index) => (
-                                <p
-                                    key={index}
-                                    className="text-base leading-relaxed text-navy-600"
-                                >
-                                    {paragraph}
-                                </p>
-                            ))}
-                        </div>
+                        {solution.descriptionHtml ? (
+                            <CmsContent html={solution.descriptionHtml} className="mt-4" />
+                        ) : (
+                            <div className="mt-4 space-y-4">
+                                {solution.description.map((paragraph, index) => (
+                                    <p
+                                        key={index}
+                                        className="text-base leading-relaxed text-navy-600"
+                                    >
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+                        )}
 
                         {/* Example use case */}
                         <div className="mt-10 rounded-xl border border-navy-100 bg-navy-50 p-6">

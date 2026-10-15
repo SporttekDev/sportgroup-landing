@@ -2,6 +2,7 @@
 // Helper bersama untuk semua transformer CMS (business line, solution, dst.).
 
 import "server-only";
+import sanitizeHtml from "sanitize-html";
 
 const API_ORIGIN = process.env.LARAVEL_API_URL?.replace(/\/$/, "");
 
@@ -86,4 +87,73 @@ export function resolveImage(path: string | null | undefined): string | undefine
     // Buang awalan "storage/" (juga yang ganda) lalu susun ulang satu kali.
     const relative = value.replace(/^\/?(storage\/)+/, "").replace(/^\/+/, "");
     return `${API_ORIGIN}/storage/${relative}`;
+}
+
+// ---------------------------------------------------------------------------
+// HTML dari editor rich text CMS (Summernote)
+// ---------------------------------------------------------------------------
+
+const COLOR_VALUES = [
+    /^#[0-9a-f]{3,8}$/i,
+    /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*(0|1|0?\.\d+)\s*)?\)$/i,
+    /^[a-z]{3,20}$/i,
+];
+
+/**
+ * Bersihkan HTML dari CMS agar aman dirender dengan dangerouslySetInnerHTML.
+ *
+ * Diizinkan: paragraf, tebal/miring/garis bawah/coret, tautan, daftar,
+ * heading, kutipan, tabel, kode, garis pemisah, serta style warna teks,
+ * warna latar, dan perataan teks.
+ * Dibuang: script, iframe, gambar, event handler (onclick dst.), protokol
+ * selain http/https/mailto/tel, dan style lain.
+ * Heading h1 diturunkan jadi h2 karena halaman sudah punya satu h1.
+ *
+ * @returns HTML bersih, atau undefined kalau isinya kosong.
+ */
+export function sanitizeBodyHtml(html: string | null | undefined): string | undefined {
+    if (!html || !html.trim()) return undefined;
+
+    const clean = sanitizeHtml(html, {
+        allowedTags: [
+            "p", "br", "hr", "span", "div",
+            "strong", "b", "em", "i", "u", "s", "strike", "del", "sub", "sup",
+            "a",
+            "ul", "ol", "li",
+            "h2", "h3", "h4", "h5", "h6",
+            "blockquote", "pre", "code",
+            "table", "thead", "tbody", "tfoot", "tr", "th", "td",
+        ],
+        allowedAttributes: {
+            a: ["href", "title", "target", "rel"],
+            th: ["colspan", "rowspan", "style"],
+            td: ["colspan", "rowspan", "style"],
+            "*": ["style"],
+        },
+        allowedStyles: {
+            "*": {
+                color: COLOR_VALUES,
+                "background-color": COLOR_VALUES,
+                "text-align": [/^(left|right|center|justify)$/],
+            },
+        },
+        allowedSchemes: ["http", "https", "mailto", "tel"],
+        allowProtocolRelative: false,
+        transformTags: {
+            h1: "h2",
+            a: (tagName, attribs) => {
+                const external = /^https?:\/\//i.test(attribs.href ?? "");
+                return {
+                    tagName,
+                    attribs: external
+                        ? { ...attribs, target: "_blank", rel: "noopener noreferrer" }
+                        : attribs,
+                };
+            },
+        },
+        // Buang paragraf kosong seperti <p><br></p> yang sering dihasilkan editor.
+        exclusiveFilter: (frame) => frame.tag === "p" && !frame.text.trim(),
+    }).trim();
+
+    return clean.length > 0 ? clean : undefined;
 }

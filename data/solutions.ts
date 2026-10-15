@@ -15,6 +15,8 @@ export interface Solution {
     tagline: string;
     summary: string;
     description: string[];
+    /** HTML bersih dari CMS; jika ada, dipakai menggantikan description. */
+    descriptionHtml?: string;
     relatedBusinessLineSlugs: string[];
     exampleUseCase: string;
     isDraft: boolean;

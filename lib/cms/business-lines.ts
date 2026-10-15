@@ -24,59 +24,10 @@ import {
     asStringList,
     htmlToParagraphs,
     resolveImage,
+    sanitizeBodyHtml,
 } from "./utils";
 
 const CONTENT_TYPE = "company";
-
-// ---------------------------------------------------------------------------
-// Normalisasi link eksternal dari CMS.
-// Admin boleh mengisi tanpa protokol ("playpro-academy.id") atau hanya handle
-// ("@playproacademy"). Hasilnya selalu URL absolut http(s); nilai yang tidak
-// valid menjadi undefined sehingga tombolnya tidak dirender.
-// Skema lain (javascript:, mailto:, dst.) otomatis ditolak.
-// ---------------------------------------------------------------------------
-
-function toHttpUrl(value: string): URL | undefined {
-    const candidate = /^https?:\/\//i.test(value)
-        ? value
-        : `https://${value.replace(/^\/+/, "")}`;
-
-    try {
-        const url = new URL(candidate);
-        const isHttp = url.protocol === "http:" || url.protocol === "https:";
-        // Hostname harus berbentuk domain (mengandung titik), mis. "playpro.id".
-        return isHttp && url.hostname.includes(".") ? url : undefined;
-    } catch {
-        return undefined;
-    }
-}
-
-function normalizeWebsite(value: string | undefined): string | undefined {
-    const trimmed = value?.trim();
-    if (!trimmed) return undefined;
-    return toHttpUrl(trimmed)?.href;
-}
-
-const INSTAGRAM_HANDLE = /^[A-Za-z0-9._]{1,30}$/;
-
-// Menerima: "playproacademy", "@playproacademy", "playpro.id" (handle yang
-// memang memakai titik), "instagram.com/playproacademy" dan URL penuh.
-function normalizeInstagram(value: string | undefined): string | undefined {
-    const trimmed = value?.trim();
-    if (!trimmed) return undefined;
-
-    const looksLikeUrl =
-        /^https?:\/\//i.test(trimmed) ||
-        trimmed.includes("/") ||
-        /^(www\.)?instagram\.com/i.test(trimmed);
-
-    if (looksLikeUrl) return toHttpUrl(trimmed)?.href;
-
-    const handle = trimmed.replace(/^@/, "");
-    return INSTAGRAM_HANDLE.test(handle)
-        ? `https://instagram.com/${handle}`
-        : undefined;
-}
 
 export function toBusinessLine(content: CmsContent): BusinessLine {
     const attrs = content.attributes ?? {};
@@ -95,6 +46,8 @@ export function toBusinessLine(content: CmsContent): BusinessLine {
         summary: content.excerpt ?? "",
         // Fallback ke attributes.description untuk record lama sebelum dipindah ke body.
         description: paragraphs.length ? paragraphs : asStringArray(attrs.description),
+        // HTML bersih dari editor CMS (tebal, tautan, daftar, dst.); kosong jika body kosong.
+        descriptionHtml: sanitizeBodyHtml(content.body),
         services: asStringArray(attrs.services),
         location: asString(attrs.location),
         badges: asStringArray(attrs.badges),
@@ -103,33 +56,17 @@ export function toBusinessLine(content: CmsContent): BusinessLine {
         logo: resolveImage(content.cover_image_url) ?? resolveImage(asString(attrs.logo)),
         accent: asString(attrs.accent),
         bgSrc: resolveImage(asString(attrs.bg_src)),
-        website: normalizeWebsite(asString(attrs.website)),
-        instagram: normalizeInstagram(asString(attrs.instagram)),
+        website: asString(attrs.website),
+        instagram: asString(attrs.instagram),
         gallery: gallery.length ? gallery : undefined,
     };
 }
 
-// Daftar business line dipakai untuk bagian pelengkap (mis. "Other Business
-// Lines") dan generateStaticParams. Jika CMS gagal dijangkau (timeout, 5xx,
-// env belum diisi), kembalikan daftar kosong dan catat error-nya, supaya satu
-// kegagalan sementara tidak menjatuhkan seluruh halaman.
 export async function getBusinessLines(): Promise<BusinessLine[]> {
-    try {
-        const items = await listContents(CONTENT_TYPE);
-        return items.map(toBusinessLine).sort((a, b) => a.order - b.order);
-    } catch (error) {
-        console.error(
-            "[cms] getBusinessLines failed:",
-            error instanceof Error ? `${error.name}: ${error.message}` : error
-        );
-        return [];
-    }
+    const items = await listContents(CONTENT_TYPE);
+    return items.map(toBusinessLine).sort((a, b) => a.order - b.order);
 }
 
-// Sengaja TIDAK menelan error selain CmsNotFoundError. Jika CMS timeout dan
-// fungsi ini mengembalikan null, halaman akan memanggil notFound() dan 404
-// itu bisa ikut tersimpan di cache. Dengan melempar error, Next.js tetap
-// memakai versi halaman terakhir yang berhasil saat revalidasi gagal.
 export async function getBusinessLineBySlug(
     slug: string
 ): Promise<BusinessLine | null> {

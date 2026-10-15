@@ -15,14 +15,13 @@ import {
     MapPin,
     Globe,
     type LucideIcon,
-    ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactCTASection } from "@/components/contact-cta-section";
-import { GalleryImage } from "@/components/gallery-image";
+import { CmsContent } from "@/components/cms-content";
 import {
     getBusinessLines,
     getBusinessLineBySlug,
@@ -62,10 +61,6 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
     "sport-growth-indonesia": TrendingUp,
     "from-the-origin": Plane,
 };
-
-// Remote (CMS) images skip the Next.js optimizer to avoid upstream timeouts
-// on slow CMS responses; local /public files still get optimized.
-const isRemoteImage = (src: string) => /^https?:\/\//i.test(src);
 
 interface BusinessLineDetailPageProps {
     params: Promise<{ slug: string }>;
@@ -114,16 +109,6 @@ export default async function BusinessLineDetailPage({
     // render nothing at all if neither exists (no empty CTA row).
     const hasLinks = Boolean(businessLine.website || businessLine.instagram);
 
-    // Gallery comes from the CMS as an array of image URLs. Sanitize it
-    // (drop empty / non-string entries) and hide the whole section when
-    // nothing usable remains.
-    const galleryImages = Array.isArray(businessLine.gallery)
-        ? businessLine.gallery.filter(
-            (src): src is string => typeof src === "string" && src.trim() !== ""
-        )
-        : [];
-    const hasGallery = galleryImages.length > 0;
-
     const allLines = await getBusinessLines();
     const otherLines = allLines
         .filter((line) => line.slug !== businessLine.slug)
@@ -147,7 +132,6 @@ export default async function BusinessLineDetailPage({
                                 alt=""
                                 fill
                                 priority
-                                unoptimized={isRemoteImage(businessLine.bgSrc as string)}
                                 sizes="100vw"
                                 className="object-cover"
                             />
@@ -185,7 +169,6 @@ export default async function BusinessLineDetailPage({
                                             alt={businessLine.name}
                                             width={40}
                                             height={40}
-                                            unoptimized={isRemoteImage(businessLine.logo)}
                                             className="h-8 w-8 object-contain"
                                         />
                                     ) : (
@@ -212,12 +195,10 @@ export default async function BusinessLineDetailPage({
                                             href={businessLine.website}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-navy-900 shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:shadow-xl"
-                                            style={hasTheme ? { color: businessLine.accent } : undefined}
+                                            className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20"
                                         >
                                             <Globe className="h-4 w-4" />
                                             Visit Website
-                                            <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                                         </a>
                                     )}
                                     {businessLine.instagram && (
@@ -266,16 +247,20 @@ export default async function BusinessLineDetailPage({
                         <h2 className="font-display text-2xl font-semibold text-navy-900">
                             Overview
                         </h2>
-                        <div className="mt-4 space-y-4">
-                            {businessLine.description.map((paragraph, index) => (
-                                <p
-                                    key={index}
-                                    className="text-base leading-relaxed text-navy-600"
-                                >
-                                    {paragraph}
-                                </p>
-                            ))}
-                        </div>
+                        {businessLine.descriptionHtml ? (
+                            <CmsContent html={businessLine.descriptionHtml} className="mt-4" />
+                        ) : (
+                            <div className="mt-4 space-y-4">
+                                {businessLine.description.map((paragraph, index) => (
+                                    <p
+                                        key={index}
+                                        className="text-base leading-relaxed text-navy-600"
+                                    >
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
                     {/* Services list */}
@@ -299,48 +284,61 @@ export default async function BusinessLineDetailPage({
                 </div>
             </section>
 
-            {/* Gallery — rendered from the CMS `gallery` array. The whole
-                section is omitted when there are no images. */}
-            {hasGallery && (
-                <section className="border-t border-navy-100 bg-navy-50">
-                    <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-                        <h2 className="font-display text-2xl font-semibold text-navy-900">
-                            Gallery
-                        </h2>
-                        <div
-                            className={cn(
-                                "mt-8 grid gap-4",
-                                galleryImages.length === 1
-                                    ? "grid-cols-1"
-                                    : "grid-cols-2 md:grid-cols-4"
-                            )}
-                        >
-                            {galleryImages.map((src, index) => (
+            {/* Gallery — explicit pending-asset empty state (not a finished
+                gallery). Dashed border + per-slot label signal "awaiting real
+                photography" rather than reading as a broken finished component. */}
+            <section className="border-t border-navy-100 bg-navy-50">
+                <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+                    <h2 className="font-display text-2xl font-semibold text-navy-900">
+                        Gallery
+                    </h2>
+                    {/* <p className="mt-2 text-sm text-navy-500">
+                        [PLACEHOLDER: replace with real {businessLine.name} facility / activity photography]
+                    </p> */}
+                    {businessLine.gallery && businessLine.gallery.length > 0 ? (
+                        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+                            {businessLine.gallery.map((src, index) => (
                                 <div
                                     key={`${src}-${index}`}
-                                    className={cn(
-                                        "relative overflow-hidden rounded-xl bg-white",
-                                        galleryImages.length === 1
-                                            ? "aspect-video max-w-3xl"
-                                            : "aspect-square"
-                                    )}
+                                    className="relative aspect-square overflow-hidden rounded-xl border border-navy-100 bg-white"
                                 >
-                                    <GalleryImage
-                                        className="hover:scale-105"
+                                    <Image
                                         src={src}
-                                        alt={`${businessLine.name} gallery ${index + 1}`}
-                                        sizes={
-                                            galleryImages.length === 1
-                                                ? "(min-width: 1024px) 768px, 100vw"
-                                                : "(min-width: 768px) 25vw, 50vw"
-                                        }
+                                        alt={`${businessLine.name} photo ${index + 1}`}
+                                        fill
+                                        sizes="(max-width: 768px) 50vw, 25vw"
+                                        className="object-cover"
                                     />
                                 </div>
                             ))}
                         </div>
-                    </div>
-                </section>
-            )}
+                    ) : (
+                        <div className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+                            {Array.from({ length: 4 }).map((_, index) => (
+                                <div
+                                    key={index}
+                                    className="flex aspect-square flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-navy-200 bg-white"
+                                >
+                                    {businessLine.logo ? (
+                                        <Image
+                                            src={businessLine.logo}
+                                            alt={businessLine.name}
+                                            width={64}
+                                            height={64}
+                                            className="h-8 w-8 object-contain opacity-60"
+                                        />
+                                    ) : (
+                                        <Icon className="h-8 w-8 text-navy-200" strokeWidth={1.5} />
+                                    )}
+                                    <span className="text-[11px] font-medium text-navy-300">
+                                        Photo slot {index + 1}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </section>
 
             {/* Related business lines */}
             {otherLines.length > 0 && (

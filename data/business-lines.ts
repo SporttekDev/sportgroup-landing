@@ -19,6 +19,7 @@ export interface BusinessLine {
     tagline: string;
     summary: string;
     description: string[];
+    descriptionHtml?: string;
     services: string[];
     location?: string;
     badges?: string[];
