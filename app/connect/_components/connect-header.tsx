@@ -1,29 +1,22 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { CONNECT, normalizeWebUrl } from "@/lib/connect-links";
+import { CONNECT_GROUP } from "@/lib/connect-links";
 
-// Header khusus /connect: hanya brand dan satu tautan ke website utama.
-// Sengaja tidak ada menu navigasi supaya pengunjung tetap fokus pada tombol.
-export function ConnectHeader() {
-    const website = normalizeWebUrl(CONNECT.website);
-
+// Header /connect: merek grup di kiri, satu tautan ke website business line di
+// kanan (jika ada). Sengaja tanpa menu navigasi supaya pengunjung fokus.
+// `website` sudah dinormalisasi oleh pemanggil.
+export function ConnectHeader({ website }: { website?: string }) {
     return (
         <header className="relative z-10">
             <div className="mx-auto flex w-full max-w-md items-center justify-between gap-4 px-5 py-5">
-                {CONNECT.logoSrc ? (
-                    <Image
-                        src={CONNECT.logoSrc}
-                        alt={CONNECT.title}
-                        width={160}
-                        height={40}
-                        priority
-                        className="h-8 w-auto max-w-[60%] object-contain object-left"
-                    />
-                ) : (
-                    <span className="font-display text-sm font-semibold tracking-tight text-white">
-                        {CONNECT.title}
-                    </span>
-                )}
+                <Image
+                    src={CONNECT_GROUP.logoSrc}
+                    alt={CONNECT_GROUP.name}
+                    width={160}
+                    height={40}
+                    priority
+                    className="h-7 w-auto max-w-[60%] object-contain object-left"
+                />
 
                 {website && (
                     <a

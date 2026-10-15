@@ -1,6 +1,7 @@
-// Konfigurasi halaman /connect (halaman link untuk QR).
-// Edit HANYA file ini untuk mengganti isi halaman.
+// Konfigurasi halaman /connect (halaman link untuk QR), satu halaman per
+// business line: /connect/sti, /connect/playpro, dst.
 //
+// Menambah business line baru = menambah satu blok di CONNECT_PROFILES.
 // Aturan: tombol yang datanya kosong atau tidak valid otomatis TIDAK dirender,
 // jadi aman membiarkan sebagian kolom kosong.
 
@@ -15,50 +16,108 @@ export interface SalesContact {
 
 export interface BrochureFile {
     label: string;
-    /** Path file di /public (mis. "/brosur/company-profile.pdf") atau URL penuh. */
+    /** Path file di /public (mis. "/brosur/sti-company-profile.pdf") atau URL penuh. */
     href: string;
     description?: string;
 }
 
-export const CONNECT = {
-    /**
-     * Nama acara (opsional). Dipakai di badge header, judul tab, dan teks pesan
-     * WhatsApp. Kosongkan ("") setelah acara selesai agar halaman bersifat umum.
-     */
-    eventName: "ISFEX",
-    /** Nama perusahaan di header halaman. */
-    title: "Sport Group Indonesia",
-    tagline: "Hubungi tim kami atau unduh brosur langsung dari sini.",
-    /** Logo di /public (opsional). Memakai logo putih SGI karena latar halaman gelap. */
-    logoSrc: "/logos/sport-group-indonesia-white.png" as string,
-
-    /** Teks awal pesan WhatsApp. Nama acara ditambahkan otomatis. */
-    whatsappGreeting: "Halo, saya mengunjungi booth Anda di",
-
-    /**
-     * "rotate": satu tombol "Chat dengan Sales"; tiap ditekan diarahkan ke sales
-     *           yang dipilih acak (tidak sama dengan pilihan sebelumnya di HP itu).
-     * "list":   tiap sales punya tombol sendiri.
-     */
-    salesMode: "rotate" as "rotate" | "list",
-
-    // TODO: isi dengan data sebenarnya.
-    sales: [
-        // { name: "Nama Sales", role: "Konstruksi lapangan", phone: "0812xxxxxxxx" },
-        { name: "Iyan", role: "Sales", phone: "085156239714" },
-        { name: "Rizky", role: "Sales", phone: "087780216333" },
-        { name: "Haykal", role: "Sales", phone: "085693815606" },
-    ] as SalesContact[],
-
-    // TODO: taruh file PDF di /public/brosur lalu isi path-nya.
-    brochures: [
-        { label: "Company Profile", href: "/brosur/compro.pdf" },
-    ] as BrochureFile[],
-
-    // TODO: isi dengan alamat sebenarnya. Boleh tanpa "https://".
-    website: "sportteknologi.id" as string,
-    instagram: "sporttek.id" as string,
+/** Identitas grup: tampil di header dan footer semua halaman /connect. */
+export const CONNECT_GROUP = {
+    name: "Sport Group Indonesia",
+    /** Logo putih di /public (latar halaman /connect selalu gelap). */
+    logoSrc: "/logos/sport-group-indonesia-white.png",
 };
+
+export interface ConnectProfile {
+    /** Bagian alamat: /connect/<slug>. Jangan diubah setelah QR dicetak. */
+    slug: string;
+    name: string;
+    /** Dipakai di teks pesan WhatsApp, mis. "Halo STI, ...". */
+    shortName: string;
+    category: string;
+    tagline: string;
+    /** Logo di /public. Ditampilkan di kartu putih, jadi logo berwarna aman. */
+    logoSrc: string;
+    /** Warna merek (hex 6 digit). Dipakai sebagai latar halaman; harus cukup gelap untuk teks putih. */
+    accent: string;
+    /**
+     * Nama acara (opsional). Tampil sebagai badge dan masuk ke teks pesan
+     * WhatsApp. Kosongkan setelah acara selesai agar halaman bersifat umum.
+     */
+    eventName?: string;
+    /**
+     * "rotate" (bawaan): satu tombol "Chat dengan Sales"; tiap ditekan diarahkan
+     *   ke sales acak (tidak sama dengan pilihan sebelumnya di HP itu).
+     * "list": tiap sales punya tombol sendiri.
+     */
+    salesMode?: "rotate" | "list";
+    sales: SalesContact[];
+    brochures: BrochureFile[];
+    /** Boleh tanpa "https://". */
+    website?: string;
+    /** Boleh "@handle", "handle", atau URL lengkap. */
+    instagram?: string;
+}
+
+export const CONNECT_PROFILES: ConnectProfile[] = [
+    {
+        slug: "sti",
+        name: "Sport Teknologi Indonesia",
+        shortName: "STI",
+        category: "Sports Contractor",
+        tagline: "Konstruksi lapangan, peralatan, dan infrastruktur event berstandar kompetisi.",
+        logoSrc: "/logos/sport-teknologi-indonesia.png",
+        accent: "#630909",
+        eventName: "",
+        // TODO: isi dengan data sebenarnya.
+        sales: [
+            // { name: "Nama Sales", role: "Konstruksi lapangan", phone: "0812xxxxxxxx" },
+            { name: "Iyan", role: "Sales", phone: "085156239714" },
+            { name: "Rizky", role: "Sales", phone: "087780216333" },
+            { name: "Haykal", role: "Sales", phone: "08569381" },
+        ],
+        // TODO: taruh PDF di /public/brosur lalu isi path-nya.
+        brochures: [
+            // { label: "Company Profile", href: "/brosur/sti-company-profile.pdf" },
+            { label: "Company Profile STI", href: "/brosur/sti-company-profile.pdf" },
+        ],
+        // TODO: isi alamat yang sudah dikonfirmasi (di data lama masih DUMMY).
+        website: "sportteknologi.id",
+        instagram: "sporttek.id",
+    },
+    {
+        slug: "playpro",
+        name: "PlayPro",
+        shortName: "PlayPro",
+        category: "Sports Activity Platform",
+        tagline: "Satu platform untuk bermain, memesan, dan mengelola semua aktivitas olahraga.",
+        logoSrc: "/logos/playpro.png",
+        accent: "#b8181f",
+        eventName: "",
+        sales: [],
+        brochures: [],
+        website: "",
+        instagram: "",
+    },
+    {
+        slug: "playpro-academy",
+        name: "PlayPro Academy",
+        shortName: "PlayPro Academy",
+        category: "Youth Sports Academy",
+        tagline: "Pelatihan bersertifikat untuk atlet muda, dari balita hingga junior.",
+        logoSrc: "/logos/playpro-academy.png",
+        accent: "#275466",
+        eventName: "",
+        sales: [],
+        brochures: [],
+        website: "",
+        instagram: "",
+    },
+];
+
+export function getConnectProfile(slug: string): ConnectProfile | undefined {
+    return CONNECT_PROFILES.find((profile) => profile.slug === slug);
+}
 
 // ---------------------------------------------------------------------------
 // Pembentuk daftar tombol
@@ -153,6 +212,20 @@ function normalizeFileHref(raw: string | undefined): string | undefined {
     return normalizeWebUrl(value);
 }
 
+const FALLBACK_ACCENT = "#0b1f3a";
+
+/** Hanya hex 6 digit yang diterima; selain itu pakai warna cadangan. */
+export function normalizeAccent(raw: string | undefined): string {
+    const value = raw?.trim();
+    return value && /^#[0-9a-fA-F]{6}$/.test(value) ? value : FALLBACK_ACCENT;
+}
+
+function buildMessage(profile: ConnectProfile): string {
+    return profile.eventName?.trim()
+        ? `Halo ${profile.shortName}, saya mengunjungi booth Anda di ${profile.eventName.trim()}. Saya ingin informasi lebih lanjut.`
+        : `Halo ${profile.shortName}, saya ingin informasi lebih lanjut.`;
+}
+
 export interface SalesTarget {
     id: string;
     name: string;
@@ -161,13 +234,10 @@ export interface SalesTarget {
 }
 
 /** Sales yang nomornya valid, lengkap dengan tautan WhatsApp-nya. */
-export function getSalesTargets(config: typeof CONNECT = CONNECT): SalesTarget[] {
-    const message = config.eventName
-        ? `${config.whatsappGreeting} ${config.eventName}. Saya ingin informasi lebih lanjut.`
-        : "Halo, saya ingin informasi lebih lanjut.";
-
+export function getSalesTargets(profile: ConnectProfile): SalesTarget[] {
+    const message = buildMessage(profile);
     const targets: SalesTarget[] = [];
-    config.sales.forEach((contact, index) => {
+    profile.sales.forEach((contact, index) => {
         const href = buildWhatsAppUrl(contact.phone, message);
         if (!href || !contact.name.trim()) return;
         targets.push({
@@ -190,20 +260,22 @@ export function pickSalesTarget(
     return pool[Math.floor(Math.random() * pool.length)];
 }
 
-export const SALES_ROTATE_PATH = "/connect/sales";
+export function salesRotatePath(profile: ConnectProfile): string {
+    return `/connect/${profile.slug}/sales`;
+}
 
-export function buildConnectLinks(config: typeof CONNECT = CONNECT): ConnectLink[] {
+export function buildConnectLinks(profile: ConnectProfile): ConnectLink[] {
     const links: ConnectLink[] = [];
-    const targets = getSalesTargets(config);
+    const targets = getSalesTargets(profile);
 
-    if (config.salesMode === "rotate" && targets.length > 0) {
+    if ((profile.salesMode ?? "rotate") === "rotate" && targets.length > 0) {
         links.push({
             id: "sales-rotate",
             kind: "whatsapp",
             group: "sales",
             label: "Chat dengan Sales",
             description: "Tim kami siap membantu via WhatsApp",
-            href: SALES_ROTATE_PATH,
+            href: salesRotatePath(profile),
             primary: true,
         });
     } else {
@@ -220,7 +292,7 @@ export function buildConnectLinks(config: typeof CONNECT = CONNECT): ConnectLink
         });
     }
 
-    config.brochures.forEach((file, index) => {
+    profile.brochures.forEach((file, index) => {
         const href = normalizeFileHref(file.href);
         if (!href || !file.label.trim()) return;
         links.push({
@@ -234,7 +306,7 @@ export function buildConnectLinks(config: typeof CONNECT = CONNECT): ConnectLink
         });
     });
 
-    const website = normalizeWebUrl(config.website);
+    const website = normalizeWebUrl(profile.website);
     if (website) {
         links.push({
             id: "website",
@@ -246,7 +318,7 @@ export function buildConnectLinks(config: typeof CONNECT = CONNECT): ConnectLink
         });
     }
 
-    const instagram = normalizeInstagram(config.instagram);
+    const instagram = normalizeInstagram(profile.instagram);
     if (instagram) {
         links.push({
             id: "instagram",
