@@ -27,6 +27,7 @@ export default async function BusinessLinePage() {
             <BusinessLineGrid
                 title="All Business Lines"
                 businessLines={businessLines}
+                withPattern
             />
 
             <ContactCTASection variant="business-line" />

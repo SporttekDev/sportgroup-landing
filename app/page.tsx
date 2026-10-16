@@ -11,6 +11,7 @@ import Image from "next/image";
 import { BusinessLineCarousel } from "@/components/business-line-carousel";
 import { getBusinessLines } from "@/lib/cms/business-lines";
 import { getSolutions } from "@/lib/cms/solutions";
+import { AboutSummarySection } from "@/components/about-summary-section";
 
 export const metadata: Metadata = {
   title: "Sport Group Indonesia | Building the Future of Indonesian Sport",
@@ -73,33 +74,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* About summary + inline CTA */}
-      <section className="border-t border-navy-100 bg-navy-50">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-16">
-            <div className="lg:col-span-1">
-              <span className="text-xs font-semibold uppercase tracking-wide text-navy-400">
-                About SGI
-              </span>
-              <h2 className="mt-2 font-display text-3xl font-semibold leading-display-safe tracking-tight text-navy-900">
-                One holding company, seven ways to grow sport.
-              </h2>
-            </div>
-            <div className="lg:col-span-2">
-              <p className="text-base leading-relaxed text-navy-600">
-                Sport Group Indonesia brings together sports contracting, activity platforms, youth academies, venues, infrastructure investment, and sport tourism under one holding company. Each business line operates independently, connected by a shared standard for how sport should be built and experienced in Indonesia.
-              </p>
-              <Link
-                href="/about-us"
-                className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-navy-800 hover:text-navy-600"
-              >
-                Learn more about SGI
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AboutSummarySection />
 
       <BusinessLineCarousel
         eyebrow="What We Do"
