@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -101,13 +101,49 @@ export function BusinessLineCarousel({
     autoplayInterval = AUTOPLAY_MS,
 }: BusinessLineCarouselProps) {
     const reduce = useReducedMotion();
-    const items = [...businessLines]
-        .sort((a, b) => a.order - b.order)
-        .slice(0, limit ?? businessLines.length);
+    const items = useMemo(
+        () =>
+            [...businessLines]
+                .sort((a, b) => a.order - b.order)
+                .slice(0, limit ?? businessLines.length),
+        [businessLines, limit]
+    );
 
     const [index, setIndex] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
     const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+    // The background photo follows `index` only after its image has loaded and
+    // decoded, so the user never sees a bare accent colour waiting for a photo.
+    // `loaded` holds the slugs whose photo is ready (or failed, so a broken
+    // image can never block the carousel); `shown` is the last slide whose
+    // background was actually displayed.
+    const [loaded, setLoaded] = useState<ReadonlySet<string>>(() => new Set());
+    const [shown, setShown] = useState(0);
+
+    const markReady = useCallback((slug: string) => {
+        setLoaded((prev) => (prev.has(slug) ? prev : new Set(prev).add(slug)));
+    }, []);
+
+    const markLoaded = useCallback(
+        (slug: string, img: HTMLImageElement) => {
+            const done = () => markReady(slug);
+            if (typeof img.decode === "function") img.decode().then(done, done);
+            else done();
+        },
+        [markReady]
+    );
+
+    // Warm the cache for remote logos so they don't pop in while sliding.
+    useEffect(() => {
+        items.forEach((line) => {
+            if (line.logo && isRemoteImage(line.logo)) {
+                const img = new window.Image();
+                img.decoding = "async";
+                img.src = line.logo;
+            }
+        });
+    }, [items]);
 
     const goTo = useCallback(
         (next: number) => {
@@ -136,7 +172,15 @@ export function BusinessLineCarousel({
     if (items.length === 0) return null;
 
     const current = items[index];
-    const hasTheme = Boolean(current.accent && current.bgSrc);
+    const photoReady =
+        !current.accent || !current.bgSrc || loaded.has(current.slug);
+
+    // Adjust state during render (React's "derived state" pattern): `shown`
+    // follows `index` only once that slide's photo is ready.
+    if (photoReady && shown !== index) setShown(index);
+
+    const bgItem = (photoReady ? current : items[shown]) ?? current;
+    const hasTheme = Boolean(bgItem.accent && bgItem.bgSrc);
 
     return (
         <section
@@ -144,34 +188,43 @@ export function BusinessLineCarousel({
                 "relative overflow-hidden py-20 transition-colors duration-700",
                 !hasTheme && "bg-navy-900"
             )}
-            style={hasTheme ? { backgroundColor: current.accent } : undefined}
+            style={hasTheme ? { backgroundColor: bgItem.accent } : undefined}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
-            {/* Crossfading background photo, same overlay technique as the detail hero */}
-            <AnimatePresence>
-                {hasTheme && (
-                    <motion.div
-                        key={current.slug}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: reduce ? 0 : 0.7 }}
-                        className="absolute inset-0 mix-blend-overlay"
+            {/* Every slide's photo is mounted at once and crossfaded with opacity,
+                so the browser can fetch them ahead of time. The one shown is
+                `bgItem`, which only advances once its photo has loaded. */}
+            {items.map((line) => {
+                if (!line.accent || !line.bgSrc) return null;
+                const isShown = line.slug === bgItem.slug;
+
+                return (
+                    <div
+                        key={line.slug}
+                        className={cn(
+                            "absolute inset-0 mix-blend-overlay transition-opacity ease-out",
+                            isShown ? "opacity-100" : "opacity-0"
+                        )}
+                        style={{ transitionDuration: reduce ? "0ms" : "700ms" }}
                         aria-hidden
                     >
                         <Image
-                            src={current.bgSrc as string}
+                            src={line.bgSrc}
                             alt=""
                             fill
-                            priority
-                            unoptimized={isRemoteImage(current.bgSrc as string)}
+                            unoptimized={isRemoteImage(line.bgSrc)}
                             sizes="100vw"
-                            className="object-cover"
+                            onLoad={(event) => markLoaded(line.slug, event.currentTarget)}
+                            onError={() => markReady(line.slug)}
+                            className={cn(
+                                "object-cover transition-opacity duration-500",
+                                loaded.has(line.slug) ? "opacity-100" : "opacity-0"
+                            )}
                         />
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                    </div>
+                );
+            })}
             <div className="absolute inset-0 bg-black/20" aria-hidden />
             {!hasTheme && (
                 <div
