@@ -51,12 +51,16 @@ export interface ConnectProfile {
      * "list": tiap sales punya tombol sendiri.
      */
     salesMode?: "rotate" | "list";
+    /** Judul grup kontak WhatsApp (bawaan "Hubungi Sales"), mis. "Hubungi Admin". */
+    salesHeading?: string;
     sales: SalesContact[];
     brochures: BrochureFile[];
     /** Boleh tanpa "https://". */
     website?: string;
     /** Boleh "@handle", "handle", atau URL lengkap. */
     instagram?: string;
+    /** Boleh "@handle", "handle", atau URL lengkap (termasuk tautan pendek vm.tiktok.com). */
+    tiktok?: string;
 }
 
 export const CONNECT_PROFILES: ConnectProfile[] = [
@@ -69,19 +73,15 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
         logoSrc: "/logos/sport-teknologi-indonesia.png",
         accent: "#630909",
         eventName: "",
-        // TODO: isi dengan data sebenarnya.
         sales: [
             // { name: "Nama Sales", role: "Konstruksi lapangan", phone: "0812xxxxxxxx" },
             { name: "Iyan", role: "Sales", phone: "085156239714" },
             { name: "Rizky", role: "Sales", phone: "087780216333" },
-            { name: "Haykal", role: "Sales", phone: "08569381" },
+            { name: "Diva", role: "Sales", phone: "085693815606" },
         ],
-        // TODO: taruh PDF di /public/brosur lalu isi path-nya.
         brochures: [
-            // { label: "Company Profile", href: "/brosur/sti-company-profile.pdf" },
             { label: "Company Profile STI", href: "/brosur/sti-company-profile.pdf" },
         ],
-        // TODO: isi alamat yang sudah dikonfirmasi (di data lama masih DUMMY).
         website: "sportteknologi.id",
         instagram: "sporttek.id",
     },
@@ -108,10 +108,20 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
         logoSrc: "/logos/playpro-academy.png",
         accent: "#275466",
         eventName: "",
-        sales: [],
+        // Tiap admin melayani wilayahnya sendiri, jadi tampil sebagai daftar
+        // tombol (bukan diacak): orang tua di Depok harus tersambung ke admin Depok.
+        salesMode: "list",
+        salesHeading: "Hubungi Admin",
+        sales: [
+            { name: "Admin Jakarta", role: "Wilayah Jakarta", phone: "085156239714" },
+            { name: "Admin Depok", role: "Wilayah Depok", phone: "085156239714" },
+            { name: "Admin Tangerang", role: "Wilayah Tangerang", phone: "085156239714" },
+            { name: "Admin Jawa Barat", role: "Bekasi · Karawang · Bandung", phone: "085156239714" },
+        ],
         brochures: [],
-        website: "",
-        instagram: "",
+        website: "playpro-academy.id",
+        instagram: "playproacademy_id",
+        tiktok: "playpro.academy",
     },
 ];
 
@@ -123,7 +133,7 @@ export function getConnectProfile(slug: string): ConnectProfile | undefined {
 // Pembentuk daftar tombol
 // ---------------------------------------------------------------------------
 
-export type LinkKind = "whatsapp" | "download" | "website" | "instagram";
+export type LinkKind = "whatsapp" | "download" | "website" | "instagram" | "tiktok";
 export type LinkGroup = "sales" | "materials" | "more";
 
 export interface ConnectLink {
@@ -133,7 +143,7 @@ export interface ConnectLink {
     label: string;
     description?: string;
     href: string;
-    /** Tombol utama (putih solid). Hanya sales pertama. */
+    /** Tombol utama (putih solid): tombol sales acak, atau sales tunggal. */
     primary?: boolean;
     /** Atribut download untuk file brosur. */
     download?: boolean;
@@ -205,6 +215,20 @@ export function normalizeInstagram(raw: string | undefined): string | undefined 
     return INSTAGRAM_HANDLE.test(handle) ? `https://instagram.com/${handle}` : undefined;
 }
 
+// Nama pengguna TikTok: 2-24 karakter (huruf, angka, garis bawah, titik),
+// tidak boleh diakhiri titik.
+const TIKTOK_HANDLE = /^(?=.{2,24}$)[A-Za-z0-9._]*[A-Za-z0-9_]$/;
+
+export function normalizeTikTok(raw: string | undefined): string | undefined {
+    const value = raw?.trim();
+    if (!value) return undefined;
+    if (/^https?:\/\//i.test(value) || value.includes("/") || /^([a-z]+\.)?tiktok\.com/i.test(value)) {
+        return normalizeWebUrl(value);
+    }
+    const handle = value.replace(/^@/, "");
+    return TIKTOK_HANDLE.test(handle) ? `https://www.tiktok.com/@${handle}` : undefined;
+}
+
 function normalizeFileHref(raw: string | undefined): string | undefined {
     const value = raw?.trim();
     if (!value) return undefined;
@@ -274,7 +298,7 @@ export function buildConnectLinks(profile: ConnectProfile): ConnectLink[] {
             kind: "whatsapp",
             group: "sales",
             label: "Chat dengan Sales",
-            description: "Tim kami siap membantu via WhatsApp",
+            description: "Langsung via WhatsApp",
             href: salesRotatePath(profile),
             primary: true,
         });
@@ -287,7 +311,9 @@ export function buildConnectLinks(profile: ConnectProfile): ConnectLink[] {
                 label: `Chat ${target.name}`,
                 description: target.role || "via WhatsApp",
                 href: target.href,
-                primary: links.length === 0,
+                // Beberapa kontak setara (mis. admin per wilayah): jangan
+                // menonjolkan yang pertama. Sorotan hanya untuk kontak tunggal.
+                primary: targets.length === 1,
             });
         });
     }
@@ -327,6 +353,18 @@ export function buildConnectLinks(profile: ConnectProfile): ConnectLink[] {
             label: "Instagram",
             description: "Ikuti kami",
             href: instagram,
+        });
+    }
+
+    const tiktok = normalizeTikTok(profile.tiktok);
+    if (tiktok) {
+        links.push({
+            id: "tiktok",
+            kind: "tiktok",
+            group: "more",
+            label: "TikTok",
+            description: "Ikuti kami",
+            href: tiktok,
         });
     }
 

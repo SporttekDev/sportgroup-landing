@@ -6,6 +6,7 @@ import {
     FileDown,
     Globe,
     MessageCircle,
+    Music2,
     type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -70,6 +71,9 @@ const KIND_ICON: Record<LinkKind, LucideIcon | typeof InstagramIcon> = {
     download: FileDown,
     website: Globe,
     instagram: InstagramIcon,
+    // lucide tidak menyediakan logo TikTok; ikon musik sebagai penanda netral
+    // (nama "TikTok" tertulis jelas di label tombol).
+    tiktok: Music2,
 };
 
 const GROUP_LABEL: Record<LinkGroup, string> = {
@@ -195,7 +199,9 @@ export default async function ConnectProfilePage({ params }: Props) {
                                         id={`group-${group}`}
                                         className="mb-3 px-1 text-xs font-semibold uppercase tracking-wide text-white/60"
                                     >
-                                        {GROUP_LABEL[group]}
+                                        {group === "sales" && profile.salesHeading
+                                            ? profile.salesHeading
+                                            : GROUP_LABEL[group]}
                                     </h2>
                                     <div className="space-y-3">
                                         {items.map((link) => (
