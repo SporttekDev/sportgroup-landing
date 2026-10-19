@@ -24,6 +24,7 @@ import {
     getAllBusinessLineSlugs,
 } from "@/lib/cms/business-lines";
 import { isRemoteImage } from "@/lib/is-remote-image";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // lucide-react dropped brand icons (Instagram, Facebook, etc.) in recent
 // versions, so this is a manual SVG matching lucide's own stroke style
@@ -291,44 +292,59 @@ export default async function BusinessLineDetailPage({
             </section>
 
             {/* Gallery — rendered from the CMS `gallery` array. The whole
-                section is omitted when there are no images. */}
+    section is omitted when there are no images. */}
             {hasGallery && (
                 <section className="border-t border-navy-100 bg-navy-50">
                     <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
                         <h2 className="font-display text-2xl font-semibold text-navy-900">
                             Gallery
                         </h2>
-                        <div
-                            className={cn(
-                                "mt-8 grid gap-4",
-                                galleryImages.length === 1
-                                    ? "grid-cols-1"
-                                    : "grid-cols-2 md:grid-cols-4"
-                            )}
+
+                        <Carousel
+                            opts={{ align: "start", loop: galleryImages.length > 4 }}
+                            className="mt-8"
                         >
-                            {galleryImages.map((src, index) => (
-                                <div
-                                    key={`${src}-${index}`}
-                                    className={cn(
-                                        "relative overflow-hidden rounded-xl bg-white",
-                                        galleryImages.length === 1
-                                            ? "aspect-video max-w-3xl"
-                                            : "aspect-square"
-                                    )}
-                                >
-                                    <GalleryImage
-                                        className="hover:scale-105"
-                                        src={src}
-                                        alt={`${businessLine.name} gallery ${index + 1}`}
-                                        sizes={
+                            <CarouselContent className="-ml-4">
+                                {galleryImages.map((src, index) => (
+                                    <CarouselItem
+                                        key={`${src}-${index}`}
+                                        className={cn(
+                                            "pl-4",
                                             galleryImages.length === 1
-                                                ? "(min-width: 1024px) 768px, 100vw"
-                                                : "(min-width: 768px) 25vw, 50vw"
-                                        }
-                                    />
+                                                ? "basis-full"
+                                                : "basis-3/4 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+                                        )}
+                                    >
+                                        <div
+                                            className={cn(
+                                                "relative overflow-hidden rounded-xl bg-white",
+                                                galleryImages.length === 1
+                                                    ? "aspect-video max-w-3xl"
+                                                    : "aspect-square"
+                                            )}
+                                        >
+                                            <GalleryImage
+                                                className="hover:scale-105"
+                                                src={src}
+                                                alt={`${businessLine.name} gallery ${index + 1}`}
+                                                sizes={
+                                                    galleryImages.length === 1
+                                                        ? "(min-width: 1024px) 768px, 100vw"
+                                                        : "(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 75vw"
+                                                }
+                                            />
+                                        </div>
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+
+                            {galleryImages.length > 1 && (
+                                <div className="mt-6 flex justify-end gap-2">
+                                    <CarouselPrevious className="static translate-y-0 border-navy-200 text-navy-800 hover:bg-navy-800 hover:text-white" />
+                                    <CarouselNext className="static translate-y-0 border-navy-200 text-navy-800 hover:bg-navy-800 hover:text-white" />
                                 </div>
-                            ))}
-                        </div>
+                            )}
+                        </Carousel>
                     </div>
                 </section>
             )}
