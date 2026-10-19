@@ -30,7 +30,7 @@ export function Footer() {
                         </p>
                         <div className="mt-6 flex items-center gap-3">
                             <a
-                                href="https://instagram.com/sportgroupindonesia"
+                                href="https://www.instagram.com/sportgroup.id" target="_blank"
                                 aria-label="Instagram"
                                 className="flex h-9 w-9 items-center justify-center rounded-full border border-navy-700 text-navy-300 transition-colors hover:border-white hover:text-white"
                             >
@@ -48,7 +48,7 @@ export function Footer() {
                                 </svg>
                             </a>
                             <a
-                                href="https://linkedin.com/company/sportgroupindonesia"
+                                href="https://linkedin.com/company/sport-teknologi-indonesia/" target="_blank"
                                 aria-label="LinkedIn"
                                 className="flex h-9 w-9 items-center justify-center rounded-full border border-navy-700 text-navy-300 transition-colors hover:border-white hover:text-white"
                             >
@@ -65,7 +65,7 @@ export function Footer() {
                                     <circle cx="4" cy="4" r="2" />
                                 </svg>
                             </a>
-                            <a
+                            {/* <a
                                 href="https://youtube.com/@sportgroupindonesia"
                                 aria-label="YouTube"
                                 className="flex h-9 w-9 items-center justify-center rounded-full border border-navy-700 text-navy-300 transition-colors hover:border-white hover:text-white"
@@ -81,7 +81,7 @@ export function Footer() {
                                     <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
                                     <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
                                 </svg>
-                            </a>
+                            </a> */}
                         </div>
                     </div>
 
@@ -140,16 +140,16 @@ export function Footer() {
                         <ul className="mt-4 space-y-3 text-sm text-navy-300">
                             <li className="flex items-start gap-2">
                                 <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
-                                <span>Jl. Jenderal Sudirman Kav. 52-53, Jakarta Selatan 12190, Indonesia</span>
+                                <span>Jl. Raya Perjuangan, Marga Mulya, Kec. Bekasi Utara, Kota Bks, Jawa Barat 17142</span>
                             </li>
                             <li className="flex items-center gap-2">
                                 <Phone className="h-4 w-4 shrink-0" />
-                                <span>+62 21 5140 1234</span>
+                                <span>+62 22 2768 8080</span>
                             </li>
-                            <li className="flex items-center gap-2">
+                            {/* <li className="flex items-center gap-2">
                                 <Mail className="h-4 w-4 shrink-0" />
                                 <span>info@sportgroupindonesia.com</span>
-                            </li>
+                            </li> */}
                         </ul>
                     </div>
                 </div >
