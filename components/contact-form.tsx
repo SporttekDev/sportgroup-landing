@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { AlertCircle, CheckCircle2, Loader2, Send } from "lucide-react";
@@ -10,16 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { businessLines } from "@/data/business-lines";
-import { solutions } from "@/data/solutions";
 
 const contactFormSchema = z.object({
     name: z.string().min(2, "Name must be at least 2 characters."),
@@ -31,7 +22,6 @@ const contactFormSchema = z.object({
         .optional()
         .or(z.literal("")),
     company: z.string().optional().or(z.literal("")),
-    relatedTo: z.string().min(1, "Please select a topic."),
     message: z.string().min(10, "Message must be at least 10 characters."),
 });
 
@@ -60,7 +50,6 @@ export function ContactForm() {
     const {
         register,
         handleSubmit,
-        control,
         reset,
         formState: { errors },
     } = useForm<ContactFormValues>({
@@ -70,7 +59,6 @@ export function ContactForm() {
             email: "",
             phone: "",
             company: "",
-            relatedTo: "",
             message: "",
         },
     });
@@ -180,46 +168,6 @@ export function ContactForm() {
                     />
                     <FieldError message={errors.company?.message} />
                 </div>
-            </div>
-
-            <div>
-                <Label htmlFor="relatedTo">Related Business Line / Solution</Label>
-                <Controller
-                    control={control}
-                    name="relatedTo"
-                    render={({ field }) => (
-                        <Select onValueChange={field.onChange} value={field.value}>
-                            <SelectTrigger
-                                id="relatedTo"
-                                aria-invalid={!!errors.relatedTo}
-                                className={cn(
-                                    "mt-1.5 w-full",
-                                    errors.relatedTo && "border-navy-800 focus-visible:ring-navy-800"
-                                )}
-                            >
-                                <SelectValue placeholder="Select a topic" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="general">General Inquiry</SelectItem>
-                                {businessLines
-                                    .sort((a, b) => a.order - b.order)
-                                    .map((line) => (
-                                        <SelectItem key={line.slug} value={`business-line:${line.slug}`}>
-                                            {line.name}
-                                        </SelectItem>
-                                    ))}
-                                {solutions
-                                    .sort((a, b) => a.order - b.order)
-                                    .map((solution) => (
-                                        <SelectItem key={solution.slug} value={`solution:${solution.slug}`}>
-                                            {solution.name}
-                                        </SelectItem>
-                                    ))}
-                            </SelectContent>
-                        </Select>
-                    )}
-                />
-                <FieldError message={errors.relatedTo?.message} />
             </div>
 
             <div>

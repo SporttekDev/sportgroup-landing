@@ -10,6 +10,8 @@ interface GalleryImageProps {
     alt: string;
     sizes: string;
     className?: string;
+    /** Load right away instead of waiting for the browser's lazy-loading heuristic. */
+    eager?: boolean;
 }
 
 // Gallery image with a loading skeleton and a graceful fallback.
@@ -18,7 +20,7 @@ interface GalleryImageProps {
 // server-side download of slow CMS images was causing upstream timeouts, and
 // the CMS already serves webp. Local files under /public (paths starting with
 // "/") keep going through the optimizer.
-export function GalleryImage({ src, alt, sizes, className }: GalleryImageProps) {
+export function GalleryImage({ src, alt, sizes, className, eager = false }: GalleryImageProps) {
     const [loaded, setLoaded] = useState(false);
     const [failed, setFailed] = useState(false);
     const isRemote = /^https?:\/\//i.test(src);
@@ -49,6 +51,7 @@ export function GalleryImage({ src, alt, sizes, className }: GalleryImageProps) 
                 fill
                 sizes={sizes}
                 unoptimized={isRemote}
+                loading={eager ? "eager" : undefined}
                 onLoad={() => setLoaded(true)}
                 onError={() => setFailed(true)}
                 className={cn(

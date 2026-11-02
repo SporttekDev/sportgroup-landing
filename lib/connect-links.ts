@@ -6,12 +6,25 @@
 // jadi aman membiarkan sebagian kolom kosong.
 
 export interface SalesContact {
+    /**
+     * Kode pendek untuk QR kartu nama: /connect/<slug>?sales=<id>.
+     * Bawaan: nama dalam huruf kecil ("Iyan" -> "iyan"). Isi manual bila ada
+     * nama kembar. Jangan diubah setelah kartu nama dicetak.
+     */
+    id?: string;
     /** Nama yang tampil di tombol, mis. "Budi - Sales Konstruksi". */
     name: string;
     /** Keterangan kecil di bawah nama (opsional), mis. "Lapangan & surface". */
     role?: string;
     /** Nomor WhatsApp: boleh 0812..., +62812..., atau 62812.... */
     phone: string;
+    /**
+     * Ikut rotasi acak di /connect/<slug> atau tidak. Bila minimal satu sales
+     * di business line ini bertanda `rotate: true`, rotasi HANYA memakai yang
+     * bertanda itu; sales lain tetap bisa dipakai lewat ?sales=<id> (kartu nama).
+     * Bila tidak ada yang bertanda, semua sales ikut rotasi.
+     */
+    rotate?: boolean;
 }
 
 export interface BrochureFile {
@@ -75,9 +88,13 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
         eventName: "",
         sales: [
             // { name: "Nama Sales", role: "Konstruksi lapangan", phone: "0812xxxxxxxx" },
-            { name: "Iyan", role: "Sales", phone: "085156239714" },
-            { name: "Rizky", role: "Sales", phone: "087780216333" },
-            { name: "Diva", role: "Sales", phone: "085693815606" },
+            // Hanya yang bertanda `rotate: true` ikut rotasi di /connect/sti.
+            // Sales tanpa tanda hanya muncul lewat QR kartu nama: /connect/sti?sales=<nama>
+
+            { name: "Sondang", role: "Sales", phone: "081282333766"},
+            { name: "Rizky", role: "Sales", phone: "087780216333", rotate: true },
+            { name: "Iyan", role: "Sales", phone: "085156239714", rotate: true },
+            { name: "Diva", role: "Sales", phone: "085693815606", rotate: true },
         ],
         brochures: [
             { label: "Company Profile STI", href: "/brosur/sti-company-profile.pdf" },
@@ -112,16 +129,19 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
         // tombol (bukan diacak): orang tua di Depok harus tersambung ke admin Depok.
         salesMode: "list",
         salesHeading: "Hubungi Admin",
+        // TODO: isi nomor WhatsApp tiap admin. Selama `phone` masih "", tombolnya
+        // otomatis disembunyikan.
         sales: [
-            { name: "Admin Jakarta", role: "Wilayah Jakarta", phone: "085156239714" },
-            { name: "Admin Depok", role: "Wilayah Depok", phone: "085156239714" },
-            { name: "Admin Tangerang", role: "Wilayah Tangerang", phone: "085156239714" },
-            { name: "Admin Jawa Barat", role: "Bekasi · Karawang · Bandung", phone: "085156239714" },
+            { name: "Admin Jakarta", role: "Wilayah Jakarta", phone: "" },
+            { name: "Admin Depok", role: "Wilayah Depok", phone: "" },
+            { name: "Admin Tangerang", role: "Wilayah Tangerang", phone: "" },
+            { name: "Admin Jawa Barat", role: "Bekasi · Karawang · Bandung", phone: "" },
         ],
         brochures: [],
-        website: "playpro-academy.id",
-        instagram: "playproacademy_id",
-        tiktok: "playpro.academy",
+        website: "",
+        // TODO: isi akun yang sudah dikonfirmasi (di data lama masih DUMMY).
+        instagram: "",
+        tiktok: "",
     },
 ];
 
@@ -252,9 +272,22 @@ function buildMessage(profile: ConnectProfile): string {
 
 export interface SalesTarget {
     id: string;
+    /** Kode untuk parameter ?sales= (huruf kecil, angka, tanda hubung). */
+    key: string;
     name: string;
     role?: string;
     href: string;
+    /** Bertanda `rotate: true` pada datanya. */
+    rotate: boolean;
+}
+
+/** "Iyan" -> "iyan", "Budi S." -> "budi-s". */
+export function toSalesKey(raw: string): string {
+    return raw
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
 }
 
 /** Sales yang nomornya valid, lengkap dengan tautan WhatsApp-nya. */
@@ -266,12 +299,21 @@ export function getSalesTargets(profile: ConnectProfile): SalesTarget[] {
         if (!href || !contact.name.trim()) return;
         targets.push({
             id: String(index),
+            key: toSalesKey(contact.id || contact.name),
             name: contact.name.trim(),
             role: contact.role?.trim() || undefined,
             href,
+            rotate: contact.rotate === true,
         });
     });
     return targets;
+}
+
+/** Sales yang boleh keluar di rotasi acak (lihat `rotate` pada SalesContact). */
+export function getRotationTargets(profile: ConnectProfile): SalesTarget[] {
+    const targets = getSalesTargets(profile);
+    const flagged = targets.filter((target) => target.rotate);
+    return flagged.length > 0 ? flagged : targets;
 }
 
 /** Pilih sales acak; hindari `lastId` (sales sebelumnya) bila ada pilihan lain. */
@@ -284,15 +326,42 @@ export function pickSalesTarget(
     return pool[Math.floor(Math.random() * pool.length)];
 }
 
+/** Cari sales berdasarkan nilai ?sales=. Tidak ketemu/tidak valid -> undefined. */
+export function findSalesTarget(
+    profile: ConnectProfile,
+    rawKey: string | undefined
+): SalesTarget | undefined {
+    const key = rawKey ? toSalesKey(rawKey) : "";
+    if (!key) return undefined;
+    return getSalesTargets(profile).find((target) => target.key === key);
+}
+
 export function salesRotatePath(profile: ConnectProfile): string {
     return `/connect/${profile.slug}/sales`;
 }
 
-export function buildConnectLinks(profile: ConnectProfile): ConnectLink[] {
+/**
+ * `salesKey` (dari ?sales=): bila cocok dengan seorang sales, tombol WhatsApp
+ * menjadi satu tombol tetap ke sales itu (tidak diacak). Bila tidak cocok,
+ * halaman berperilaku seperti biasa, jadi kartu nama lama tidak pernah rusak.
+ */
+export function buildConnectLinks(profile: ConnectProfile, salesKey?: string): ConnectLink[] {
     const links: ConnectLink[] = [];
     const targets = getSalesTargets(profile);
+    const rotation = getRotationTargets(profile);
+    const fixed = findSalesTarget(profile, salesKey);
 
-    if ((profile.salesMode ?? "rotate") === "rotate" && targets.length > 0) {
+    if (fixed) {
+        links.push({
+            id: `sales-${fixed.key}`,
+            kind: "whatsapp",
+            group: "sales",
+            label: `Chat ${fixed.name}`,
+            description: fixed.role || "Langsung via WhatsApp",
+            href: fixed.href,
+            primary: true,
+        });
+    } else if ((profile.salesMode ?? "rotate") === "rotate" && rotation.length > 0) {
         links.push({
             id: "sales-rotate",
             kind: "whatsapp",

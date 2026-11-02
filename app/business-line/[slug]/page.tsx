@@ -10,13 +10,13 @@ import {
     ArrowUpRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getBusinessLineIcon } from "@/lib/business-line-icons";
 import { BusinessLineIcon } from "@/lib/business-line-icons";
 import { Badge } from "@/components/ui/badge";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Reveal } from "@/components/motion/reveal";
 import { ContactCTASection } from "@/components/contact-cta-section";
-import { GalleryImage } from "@/components/gallery-image";
+import { BusinessLineHeroBackground } from "@/components/business-line-hero-background";
+import { BusinessLineGallery } from "@/components/business-line-gallery";
 import { CmsContent } from "@/components/cms-content";
 import {
     getBusinessLines,
@@ -24,7 +24,6 @@ import {
     getAllBusinessLineSlugs,
 } from "@/lib/cms/business-lines";
 import { isRemoteImage } from "@/lib/is-remote-image";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // lucide-react dropped brand icons (Instagram, Facebook, etc.) in recent
 // versions, so this is a manual SVG matching lucide's own stroke style
@@ -122,20 +121,7 @@ export default async function BusinessLineDetailPage({
                 style={hasTheme ? { backgroundColor: businessLine.accent } : undefined}
             >
                 {hasTheme ? (
-                    <>
-                        <div className="absolute inset-0 mix-blend-overlay" aria-hidden>
-                            <Image
-                                src={businessLine.bgSrc as string}
-                                alt=""
-                                fill
-                                priority
-                                unoptimized={isRemoteImage(businessLine.bgSrc as string)}
-                                sizes="100vw"
-                                className="object-cover"
-                            />
-                        </div>
-                        <div className="absolute inset-0 bg-black/20" aria-hidden />
-                    </>
+                    <BusinessLineHeroBackground src={businessLine.bgSrc as string} />
                 ) : (
                     <div
                         className="absolute inset-0 opacity-[0.07]"
@@ -300,51 +286,10 @@ export default async function BusinessLineDetailPage({
                             Gallery
                         </h2>
 
-                        <Carousel
-                            opts={{ align: "start", loop: galleryImages.length > 4 }}
-                            className="mt-8"
-                        >
-                            <CarouselContent className="-ml-4">
-                                {galleryImages.map((src, index) => (
-                                    <CarouselItem
-                                        key={`${src}-${index}`}
-                                        className={cn(
-                                            "pl-4",
-                                            galleryImages.length === 1
-                                                ? "basis-full"
-                                                : "basis-3/4 sm:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-                                        )}
-                                    >
-                                        <div
-                                            className={cn(
-                                                "relative overflow-hidden rounded-xl bg-white",
-                                                galleryImages.length === 1
-                                                    ? "aspect-video max-w-3xl"
-                                                    : "aspect-square"
-                                            )}
-                                        >
-                                            <GalleryImage
-                                                className="hover:scale-105"
-                                                src={src}
-                                                alt={`${businessLine.name} gallery ${index + 1}`}
-                                                sizes={
-                                                    galleryImages.length === 1
-                                                        ? "(min-width: 1024px) 768px, 100vw"
-                                                        : "(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 75vw"
-                                                }
-                                            />
-                                        </div>
-                                    </CarouselItem>
-                                ))}
-                            </CarouselContent>
-
-                            {galleryImages.length > 1 && (
-                                <div className="mt-6 flex justify-end gap-2">
-                                    <CarouselPrevious className="static translate-y-0 border-navy-200 text-navy-800 hover:bg-navy-800 hover:text-white" />
-                                    <CarouselNext className="static translate-y-0 border-navy-200 text-navy-800 hover:bg-navy-800 hover:text-white" />
-                                </div>
-                            )}
-                        </Carousel>
+                        <BusinessLineGallery
+                            images={galleryImages}
+                            name={businessLine.name}
+                        />
                     </div>
                 </section>
             )}

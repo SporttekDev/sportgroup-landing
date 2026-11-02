@@ -23,7 +23,10 @@ import {
 } from "@/lib/connect-links";
 import { ConnectShell } from "../_components/connect-shell";
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = {
+    params: Promise<{ slug: string }>;
+    searchParams: Promise<{ sales?: string | string[] }>;
+};
 
 // Hanya slug yang terdaftar di CONNECT_PROFILES yang ada; selain itu 404.
 export const dynamicParams = false;
@@ -138,13 +141,15 @@ function LinkButton({ link, accent }: { link: ConnectLink; accent: string }) {
     );
 }
 
-export default async function ConnectProfilePage({ params }: Props) {
+export default async function ConnectProfilePage({ params, searchParams }: Props) {
     const { slug } = await params;
+    const { sales } = await searchParams;
+    const salesKey = Array.isArray(sales) ? sales[0] : sales;
     const profile = getConnectProfile(slug);
     if (!profile) notFound();
 
     const accent = normalizeAccent(profile.accent);
-    const links = buildConnectLinks(profile);
+    const links = buildConnectLinks(profile, salesKey);
     const website = normalizeWebUrl(profile.website);
 
     return (

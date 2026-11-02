@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Mail, MapPin, MessageCircle, Phone, Clock } from "lucide-react";
+import { MapPin, MessageCircle, Phone, Clock } from "lucide-react";
 import { PageHero } from "@/components/page-hero";
 import { ContactForm } from "@/components/contact-form";
 
@@ -13,22 +13,17 @@ const contactInfo = [
     {
         icon: MapPin,
         label: "Address",
-        value: "Jl. Jenderal Sudirman Kav. 52-53, Jakarta Selatan 12190, Indonesia",
+        value: "Jl. Raya Perjuangan, Marga Mulya, Kec. Bekasi Utara, Kota Bekasi, Jawa Barat 17142",
     },
     {
         icon: Phone,
         label: "Phone",
-        value: "+62 21 5140 1234",
-    },
-    {
-        icon: Mail,
-        label: "Email",
-        value: "info@sportgroupindonesia.com",
+        value: "+62 822 2768 8080",
     },
     {
         icon: Clock,
         label: "Operating Hours",
-        value: "Mon–Fri, 09:00–17:00 WIB",
+        value: "Mon–Fri, 08:00–17:00 WIB",
     },
 ];
 
@@ -69,7 +64,7 @@ export default function ContactPage() {
                         {/* Map embed (dummy location: Jakarta Selatan) */}
                         <div className="mt-8 aspect-video overflow-hidden rounded-xl border border-navy-100">
                             <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.276!2d106.8195!3d-6.2244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNsKwMTMnMjcuOSJTIDEwNsKwNDknMTAuMiJF!5e0!3m2!1sen!2sid!4v1000000000000"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.2960759184716!2d107.00442397604456!3d-6.224637260964865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698dd8bd142429%3A0xd7b831ddc9adbda3!2sPT.%20Sport%20Teknologi%20Indonesia!5e0!3m2!1sid!2sid!4v1792469357344!5m2!1sid!2sid"
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getConnectProfile, getSalesTargets, pickSalesTarget } from "@/lib/connect-links";
+import { getConnectProfile, getRotationTargets, pickSalesTarget } from "@/lib/connect-links";
 
 // Wajib dinamis: setiap klik harus dihitung ulang, tidak boleh di-cache.
 export const dynamic = "force-dynamic";
@@ -19,7 +19,7 @@ export async function GET(
     }
 
     const last = request.cookies.get(COOKIE)?.value;
-    const pick = pickSalesTarget(getSalesTargets(profile), last);
+    const pick = pickSalesTarget(getRotationTargets(profile), last);
 
     // Belum ada sales valid: kembali ke halaman business line itu.
     if (!pick) {
