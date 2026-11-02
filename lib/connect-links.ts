@@ -267,7 +267,7 @@ export function normalizeAccent(raw: string | undefined): string {
 function buildMessage(profile: ConnectProfile): string {
     return profile.eventName?.trim()
         ? `Halo ${profile.shortName}, saya mengunjungi booth Anda di ${profile.eventName.trim()}. Saya ingin informasi lebih lanjut.`
-        : `Halo ${profile.shortName}, saya ingin informasi lebih lanjut.`;
+        : `Halo ${profile.shortName}, saya ingin menanyakan terkait layanan pembangunan lapangan. Apakah ${profile.shortName} dapat membantu kami dalam hal tersebut?`;
 }
 
 export interface SalesTarget {
