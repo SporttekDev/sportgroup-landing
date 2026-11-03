@@ -184,7 +184,7 @@ export default async function ConnectProfilePage({ params, searchParams }: Props
                     <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-white/65">
                         {profile.category}
                     </p>
-                    <p className="mt-3 max-w-[32ch] text-sm leading-relaxed text-white/80">
+                    <p className="mt-3 max-w-[40ch] whitespace-pre-line  text-sm leading-relaxed text-white/80">
                         {profile.tagline}
                     </p>
                 </div>
