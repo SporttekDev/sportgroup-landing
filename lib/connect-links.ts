@@ -91,7 +91,7 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
             // Hanya yang bertanda `rotate: true` ikut rotasi di /connect/sti.
             // Sales tanpa tanda hanya muncul lewat QR kartu nama: /connect/sti?sales=<nama>
 
-            { name: "Sondang", role: "Sales", phone: "081282333766"},
+            { name: "Sondang", role: "Sales", phone: "081282333766" },
             { name: "Rizky", role: "Sales", phone: "087780216333", rotate: true },
             { name: "Iyan", role: "Sales", phone: "085156239714", rotate: true },
             { name: "Diva", role: "Sales", phone: "085693815606", rotate: true },
@@ -132,16 +132,16 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
         // TODO: isi nomor WhatsApp tiap admin. Selama `phone` masih "", tombolnya
         // otomatis disembunyikan.
         sales: [
-            { name: "Admin Jakarta", role: "Wilayah Jakarta", phone: "" },
-            { name: "Admin Depok", role: "Wilayah Depok", phone: "" },
-            { name: "Admin Tangerang", role: "Wilayah Tangerang", phone: "" },
-            { name: "Admin Jawa Barat", role: "Bekasi · Karawang · Bandung", phone: "" },
+            { name: "Admin Jakarta", role: "Wilayah Jakarta", phone: "082131111549" },
+            { name: "Admin Depok", role: "Wilayah Depok", phone: "082131111549" },
+            { name: "Admin Tangerang", role: "Wilayah Tangerang", phone: "082131111549" },
+            { name: "Admin Jawa Barat", role: "Bekasi · Karawang · Bandung", phone: "082131111549" },
         ],
         brochures: [],
-        website: "",
+        website: "https://playpro-academy.id/",
         // TODO: isi akun yang sudah dikonfirmasi (di data lama masih DUMMY).
-        instagram: "",
-        tiktok: "",
+        instagram: "playproacademy_id",
+        tiktok: "playpro.academy",
     },
 ];
 
