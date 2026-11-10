@@ -135,7 +135,7 @@ export const CONNECT_PROFILES: ConnectProfile[] = [
             { name: "Admin Jakarta", role: "Wilayah Jakarta", phone: "082131111549" },
             { name: "Admin Depok", role: "Wilayah Depok", phone: "082131111549" },
             { name: "Admin Tangerang", role: "Wilayah Tangerang", phone: "082131111549" },
-            { name: "Admin Jawa Barat", role: "Bekasi · Karawang · Bandung", phone: "082131111549" },
+            { name: "Admin Jawa Barat", role: "Bekasi · Karawang · Bandung", phone: "082131111246" },
         ],
         brochures: [],
         website: "https://playpro-academy.id/",
